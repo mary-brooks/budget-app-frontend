@@ -37,15 +37,23 @@ function Navbar() {
           )}
 
           {isLoggedIn && (
-            <Link to='/'>
-              <Button
-                colorScheme='green'
-                variant='outline'
-                onClick={logOutUser}
-              >
-                Log out
-              </Button>
-            </Link>
+            <>
+              <Link to='/budgets'>
+                <Button colorScheme='green' variant='solid'>
+                  Budgets
+                </Button>
+              </Link>
+
+              <Link to='/'>
+                <Button
+                  colorScheme='green'
+                  variant='outline'
+                  onClick={logOutUser}
+                >
+                  Log out
+                </Button>
+              </Link>
+            </>
           )}
         </ButtonGroup>
       </Flex>
