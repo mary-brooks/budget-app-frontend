@@ -18,6 +18,7 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
   const [nameError, setNameError] = useState(null);
@@ -51,6 +52,30 @@ function Signup() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+
+    // Check for empty email
+    if (!email) {
+      setEmailError('Email is required');
+      return;
+    }
+
+    // Check for empty password
+    if (!password) {
+      setPasswordError('Password is required');
+      return;
+    }
+
+    // Check for empty name
+    if (!name) {
+      setNameError('Name is required');
+      return;
+    }
+
+    // Clear any previous errors
+    setEmailError(null);
+    setPasswordError(null);
+    setNameError(null);
+    setError(null);
 
     const user = { email, password, name };
 
@@ -123,7 +148,7 @@ function Signup() {
       <VStack spacing={4}>
         {error && <Text color='red.500'>{error}</Text>}
 
-        <Text>Already have an account yet?</Text>
+        <Text>Already have an account?</Text>
         <Link to={'/login'}>
           <Button colorScheme='green' variant='outline'>
             Login
