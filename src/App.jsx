@@ -28,30 +28,10 @@ function App() {
     <div className='App'>
       <Navbar />
       <Routes>
-        <Route
-          path='/'
-          element={
-            <IsAnon>
-              <HomePage />
-            </IsAnon>
-          }
-        />
-        <Route
-          path='/about'
-          element={
-            <IsAnon>
-              <AboutPage />
-            </IsAnon>
-          }
-        />
-        <Route
-          path='*'
-          element={
-            <IsAnon>
-              <ErrorPage />
-            </IsAnon>
-          }
-        />
+        <Route path='/' element={<HomePage />} />
+        <Route path='/about' element={<AboutPage />} />
+        <Route path='*' element={<ErrorPage />} />
+
         <Route
           path='/signup'
           element={
