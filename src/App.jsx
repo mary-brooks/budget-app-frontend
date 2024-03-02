@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import { useContext } from 'react';
 
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
@@ -18,39 +19,119 @@ import AddTransactionPage from './pages/transactions/AddTransactionPage';
 import SingleTransactionPage from './pages/transactions/SingleTransactionPage';
 import UpdateTransactionPage from './pages/transactions/UpdateTransactionPage';
 
+// authentication components
+import IsPrivate from './components/IsPrivate';
+import IsAnon from './components/IsAnon';
+
 function App() {
   return (
     <div className='App'>
       <Routes>
-        <Route path='/' element={<HomePage />} />
-        <Route path='/about' element={<AboutPage />} />
-        <Route path='*' element={<ErrorPage />} />
-        <Route path='/signup' element={<SignUpPage />} />
-        <Route path='/login' element={<LogInPage />} />
+        <Route
+          path='/'
+          element={
+            <IsAnon>
+              <HomePage />
+            </IsAnon>
+          }
+        />
+        <Route
+          path='/about'
+          element={
+            <IsAnon>
+              <AboutPage />
+            </IsAnon>
+          }
+        />
+        <Route
+          path='*'
+          element={
+            <IsAnon>
+              <ErrorPage />
+            </IsAnon>
+          }
+        />
+        <Route
+          path='/signup'
+          element={
+            <IsAnon>
+              <SignUpPage />
+            </IsAnon>
+          }
+        />
+        <Route
+          path='/login'
+          element={
+            <IsAnon>
+              <LogInPage />
+            </IsAnon>
+          }
+        />
 
-        <Route path='/budgets' element={<AllBudgetsPage />} />
-        <Route path='/budgets/add' element={<AddBudgetPage />} />
-        <Route path='/budgets/:budgetId' element={<SingleBudgetPage />} />
+        <Route
+          path='/budgets'
+          element={
+            <IsPrivate>
+              <AllBudgetsPage />
+            </IsPrivate>
+          }
+        />
+        <Route
+          path='/budgets/add'
+          element={
+            <IsPrivate>
+              <AddBudgetPage />
+            </IsPrivate>
+          }
+        />
+        <Route
+          path='/budgets/:budgetId'
+          element={
+            <IsPrivate>
+              <SingleBudgetPage />
+            </IsPrivate>
+          }
+        />
         <Route
           path='/budgets/update/:budgetId'
-          element={<UpdateBudgetPage />}
+          element={
+            <IsPrivate>
+              <UpdateBudgetPage />
+            </IsPrivate>
+          }
         />
 
         <Route
           path='/budgets/:budgetId/transactions'
-          element={<AllTransactionsPage />}
+          element={
+            <IsPrivate>
+              <AllTransactionsPage />
+            </IsPrivate>
+          }
         />
         <Route
           path='/budgets/:budgetId/transactions/add'
-          element={<AddTransactionPage />}
+          element={
+            <IsPrivate>
+              <AddTransactionPage />
+            </IsPrivate>
+          }
         />
         <Route
           path='/budgets/:budgetId/transactions/:transactionId'
-          element={<SingleTransactionPage />}
+          element={
+            <IsPrivate>
+              <SingleTransactionPage />
+            </IsPrivate>
+          }
         />
         <Route
           path='/budgets/:budgetId/transactions/update/:transactionId'
-          element={<UpdateTransactionPage />}
+          element={
+            <IsPrivate>
+              <UpdateTransactionPage />
+            </IsPrivate>
+          }
         />
       </Routes>
     </div>
