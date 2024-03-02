@@ -2,13 +2,52 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signup } from '../api/auth.api';
 
+import {
+  Box,
+  Heading,
+  VStack,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  Button,
+  Text,
+} from '@chakra-ui/react';
+
 function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [nameError, setNameError] = useState(null);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+
+  const handleEmailBlur = () => {
+    if (!email) {
+      setEmailError('Email is required');
+    } else {
+      setEmailError(null);
+    }
+  };
+
+  const handlePasswordBlur = () => {
+    if (!password) {
+      setPasswordError('Password is required');
+    } else {
+      setPasswordError(null);
+    }
+  };
+
+  const handleNameBlur = () => {
+    if (!name) {
+      setNameError('Name is required');
+    } else {
+      setNameError(null);
+    }
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -25,41 +64,73 @@ function Signup() {
   };
 
   return (
-    <div>
-      <h1>Sign Up</h1>
+    <>
+      <Box
+        maxW='lg'
+        mt={4}
+        mb={8}
+        mx='auto'
+        padding={4}
+        borderWidth='1px'
+        borderRadius='lg'
+      >
+        <Heading size='lg' textAlign='center' mb={2}>
+          Sign up
+        </Heading>
 
-      <form onSubmit={handleSubmit}>
-        <label>Email</label>
-        <input
-          type='email'
-          name='email'
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
+        <form onSubmit={handleSubmit}>
+          <VStack spacing={4}>
+            <FormControl isInvalid={!!nameError} isRequired>
+              <FormLabel>Name</FormLabel>
+              <Input
+                type='text'
+                value={name}
+                onChange={e => setName(e.target.value)}
+                onBlur={handleNameBlur}
+              />
+              <FormErrorMessage>{nameError}</FormErrorMessage>
+            </FormControl>
 
-        <label>Password</label>
-        <input
-          type='password'
-          name='password'
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
+            <FormControl isInvalid={!!emailError} isRequired>
+              <FormLabel>Email</FormLabel>
+              <Input
+                type='email'
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                onBlur={handleEmailBlur}
+              />
+              <FormErrorMessage>{emailError}</FormErrorMessage>
+            </FormControl>
 
-        <label>Name</label>
-        <input
-          type='text'
-          name='name'
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
+            <FormControl isInvalid={!!passwordError} isRequired>
+              <FormLabel>Password</FormLabel>
+              <Input
+                type='password'
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                onBlur={handlePasswordBlur}
+              />
+              <FormErrorMessage>{passwordError}</FormErrorMessage>
+            </FormControl>
 
-        <button type='submit'>Sign Up</button>
-      </form>
+            <Button type='submit' colorScheme='green' variant='solid'>
+              Sign up
+            </Button>
+          </VStack>
+        </form>
+      </Box>
 
-      {error && <p>{error}</p>}
-      <p>Already have an account?</p>
-      <Link to={'/login'}>Login</Link>
-    </div>
+      <VStack spacing={4}>
+        {error && <Text color='red.500'>{error}</Text>}
+
+        <Text>Already have an account yet?</Text>
+        <Link to={'/login'}>
+          <Button colorScheme='green' variant='outline'>
+            Login
+          </Button>
+        </Link>
+      </VStack>
+    </>
   );
 }
 
