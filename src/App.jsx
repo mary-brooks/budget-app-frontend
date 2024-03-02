@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom';
-import { useContext } from 'react';
 
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
@@ -22,10 +21,12 @@ import UpdateTransactionPage from './pages/transactions/UpdateTransactionPage';
 // authentication components
 import IsPrivate from './components/IsPrivate';
 import IsAnon from './components/IsAnon';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <div className='App'>
+      <Navbar />
       <Routes>
         <Route
           path='/'
