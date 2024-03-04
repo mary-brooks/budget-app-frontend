@@ -11,6 +11,7 @@ import {
   Stack,
   StackDivider,
   Button,
+  VStack,
 } from '@chakra-ui/react';
 
 import { getAllBudgets } from '../../api/budgets.api';
@@ -41,9 +42,9 @@ function AllBudgetsPage() {
   }, []);
 
   return (
-    <Flex align='center' direction='column'>
+    <VStack spacing='4'>
       {user && (
-        <Heading size='2xl' mt={4} mb={6}>
+        <Heading size='2xl' m={4}>
           {user.name}'s Budgets
         </Heading>
       )}
@@ -107,7 +108,12 @@ function AllBudgetsPage() {
             );
           })}
       </Flex>
-    </Flex>
+      <Link to='/budgets/add'>
+        <Button colorScheme='green' variant='outline'>
+          Add Budget
+        </Button>
+      </Link>
+    </VStack>
   );
 }
 
