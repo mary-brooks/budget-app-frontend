@@ -13,7 +13,6 @@ import {
   Select,
   Button,
   IconButton,
-  Icon,
 } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
@@ -37,8 +36,24 @@ function AddBudgetPage() {
   const [savingsGoalError, setSavingsGoalError] = useState(null);
 
   const [categoryAllocation, setCategoryAllocation] = useState([
-    { name: '', amount: 0 },
+    { name: '', amount: '' },
   ]);
+
+  const handleCategoryChange = (index, value) => {
+    const newCategoryAllocation = [...categoryAllocation];
+    newCategoryAllocation[index].name = value;
+    setCategoryAllocation(newCategoryAllocation);
+  };
+
+  const handleAmountChange = (index, value) => {
+    const newCategoryAllocation = [...categoryAllocation];
+    newCategoryAllocation[index].amount = parseFloat(value) || 0;
+    setCategoryAllocation(newCategoryAllocation);
+  };
+
+  const handleAddItem = () => {
+    setCategoryAllocation([...categoryAllocation, { name: '', amount: '' }]);
+  };
 
   const handleNameBlur = () => {
     if (!name) {
@@ -156,21 +171,48 @@ function AddBudgetPage() {
 
             <FormControl>
               <FormLabel>Budget by spending category:</FormLabel>
-              <Flex justify='space-between' gap={2}>
-                <Select placeholder='Select category' width='75%'>
-                  <option>Rent / Mortgage</option>
-                  <option>Bills</option>
-                  <option>Groceries</option>
-                  <option>Transport</option>
-                  <option>Restaurants</option>
-                  <option>Shopping</option>
-                  <option>Entertainment</option>
-                </Select>
-                <Input type='number' placeholder='0' width='20%' />
-                <Button>
-                  <AddIcon boxSize={2} />
-                </Button>
-              </Flex>
+              {categoryAllocation.map((item, index) => (
+                <Flex
+                  key={index}
+                  justify='flex-start'
+                  gap={2}
+                  mb={2}
+                  width='100%'
+                >
+                  <Select
+                    placeholder='Select Category'
+                    width='65%'
+                    value={item.name}
+                    onChange={e => handleCategoryChange(index, e.target.value)}
+                  >
+                    <option>Rent / Mortgage</option>
+                    <option>Bills</option>
+                    <option>Groceries</option>
+                    <option>Transport</option>
+                    <option>Restaurants</option>
+                    <option>Shopping</option>
+                    <option>Entertainment</option>
+                  </Select>
+
+                  <Input
+                    type='number'
+                    placeholder='0'
+                    width='20%'
+                    value={item.amount}
+                    onChange={e => handleAmountChange(index, e.target.value)}
+                  />
+
+                  {index === categoryAllocation.length - 1 && (
+                    <IconButton
+                      aria-label='Add Category'
+                      icon={<AddIcon />}
+                      onClick={handleAddItem}
+                      colorScheme='green'
+                      variant='ghost'
+                    />
+                  )}
+                </Flex>
+              ))}
             </FormControl>
 
             <Button type='submit' colorScheme='green' variant='solid'>
