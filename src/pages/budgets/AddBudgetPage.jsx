@@ -1,5 +1,6 @@
-import { useState, useContext } from 'react';
-import { AuthContext } from '../../context/auth.context';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { addBudget } from '../../api/budgets.api';
 
 import {
   Heading,
@@ -13,31 +14,34 @@ import {
   Select,
   Button,
   IconButton,
+  Text,
 } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
 
 function AddBudgetPage() {
-  const { user } = useContext(AuthContext);
-
   const [name, setName] = useState('');
-  const [nameError, setNameError] = useState(null);
+  const [nameError, setNameError] = useState('');
 
-  const [startDate, setStartDate] = useState(null);
-  const [startDateError, setStartDateError] = useState(null);
+  const [startDate, setStartDate] = useState('');
+  const [startDateError, setStartDateError] = useState('');
 
-  const [endDate, setEndDate] = useState(null);
-  const [endDateError, setEndDateError] = useState(null);
+  const [endDate, setEndDate] = useState('');
+  const [endDateError, setEndDateError] = useState('');
 
-  const [totalIncome, setTotalIncome] = useState(null);
-  const [totalIncomeError, setTotalIncomeError] = useState(null);
+  const [totalIncome, setTotalIncome] = useState('');
+  const [totalIncomeError, setTotalIncomeError] = useState('');
 
-  const [savingsGoal, setSavingsGoal] = useState(null);
-  const [savingsGoalError, setSavingsGoalError] = useState(null);
+  const [savingsGoal, setSavingsGoal] = useState('');
+  const [savingsGoalError, setSavingsGoalError] = useState('');
 
   const [categoryAllocation, setCategoryAllocation] = useState([
     { name: '', amount: '' },
   ]);
+
+  const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleCategoryChange = (index, value) => {
     const newCategoryAllocation = [...categoryAllocation];
@@ -67,7 +71,7 @@ function AddBudgetPage() {
     if (!startDate) {
       setStartDateError('Start date is required');
     } else {
-      setStartDateError(null);
+      setStartDateError('');
     }
   };
 
@@ -75,7 +79,7 @@ function AddBudgetPage() {
     if (!endDate) {
       setEndDateError('End date is required');
     } else {
-      setEndDateError(null);
+      setEndDateError('');
     }
   };
 
@@ -83,7 +87,7 @@ function AddBudgetPage() {
     if (!totalIncome) {
       setTotalIncomeError('Total income is required');
     } else {
-      setTotalIncomeError(null);
+      setTotalIncomeError('');
     }
   };
 
@@ -91,7 +95,51 @@ function AddBudgetPage() {
     if (!totalIncome) {
       setSavingsGoalError('Savings goal is required');
     } else {
-      setSavingsGoalError(null);
+      setSavingsGoalError('');
+    }
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    // Check for empty name
+    if (!name) {
+      setNameError('Name is required');
+      return;
+    }
+
+    // Check for start date
+    if (!startDate) {
+      setStartDateError('Start date is required');
+      return;
+    }
+
+    // Check for empty end date
+    if (!endDate) {
+      setEndDateError('End date is required');
+      return;
+    }
+
+    // Clear any previous errors
+    setNameError('');
+    setStartDateError('');
+    setEndDateError('');
+
+    const requestBody = {
+      name,
+      startDate,
+      endDate,
+      totalIncome,
+      savingsGoal,
+      categoryAllocation,
+    };
+
+    try {
+      await addBudget(requestBody);
+      navigate('/budgets');
+    } catch (error) {
+      console.log('Error adding budget', error);
+      setError(error);
     }
   };
 
@@ -110,7 +158,7 @@ function AddBudgetPage() {
           Add Budget
         </Heading>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <VStack spacing={4}>
             <FormControl isInvalid={!!nameError} isRequired>
               <FormLabel>Budget name:</FormLabel>
@@ -220,6 +268,8 @@ function AddBudgetPage() {
             </Button>
           </VStack>
         </form>
+
+        {error && <Text color='red.500'>{error}</Text>}
       </Box>
     </>
   );
