@@ -30,8 +30,8 @@ export const addBudget = budget => {
   return axios.post(`${baseURL}/budgets`, budget);
 };
 
-export const updateBudget = updatedBudget => {
-  return axios.put(`${baseURL}/budgets/${updatedBudget._id}`, updatedBudget);
+export const updateBudget = (updatedBudget, budgetId) => {
+  return axios.put(`${baseURL}/budgets/${budgetId}`, updatedBudget);
 };
 
 export const deleteBudget = budgetId => {

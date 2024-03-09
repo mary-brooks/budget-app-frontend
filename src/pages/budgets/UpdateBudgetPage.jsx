@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { getBudget } from '../../api/budgets.api';
+import { getBudget, updateBudget } from '../../api/budgets.api';
 
 import {
   Heading,
@@ -151,6 +151,8 @@ function UpdateBudgetPage() {
     };
 
     try {
+      await updateBudget(requestBody, budgetId);
+      navigate(`/budgets/${budgetId}`);
     } catch (error) {
       console.log('Error updating budget', error);
       setError(error);
@@ -171,7 +173,8 @@ function UpdateBudgetPage() {
       setSavingsGoal(budget.savingsGoal);
       setCategoryAllocation(budget.categoryAllocation);
     } catch (error) {
-      console.log(error);
+      console.log('Error retrieving budget', error);
+      setError(error);
     }
   };
 
