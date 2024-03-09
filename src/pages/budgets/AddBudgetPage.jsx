@@ -60,7 +60,7 @@ function AddBudgetPage() {
   };
 
   const handleNameBlur = () => {
-    if (!name) {
+    if (!name || name.trim() === '') {
       setNameError('Name is required');
     } else {
       setNameError('');
@@ -92,7 +92,7 @@ function AddBudgetPage() {
   };
 
   const handleSavingsBlur = () => {
-    if (!totalIncome) {
+    if (!savingsGoal) {
       setSavingsGoalError('Savings goal is required');
     } else {
       setSavingsGoalError('');
@@ -108,7 +108,7 @@ function AddBudgetPage() {
       return;
     }
 
-    // Check for start date
+    // Check for empty start date
     if (!startDate) {
       setStartDateError('Start date is required');
       return;
@@ -120,10 +120,24 @@ function AddBudgetPage() {
       return;
     }
 
+    // Check for empty total income
+    if (!totalIncome) {
+      setTotalIncomeError('Total income is required');
+      return;
+    }
+
+    // Check for empty savings goal
+    if (!savingsGoal) {
+      setSavingsGoalError('Savings goal is required');
+      return;
+    }
+
     // Clear any previous errors
     setNameError('');
     setStartDateError('');
     setEndDateError('');
+    setTotalIncomeError('');
+    setSavingsGoalError('');
 
     const requestBody = {
       name,
