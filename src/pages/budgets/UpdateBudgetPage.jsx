@@ -166,7 +166,7 @@ function UpdateBudgetPage() {
       await updateBudget(requestBody, budgetId);
       navigate(`/budgets/${budgetId}`);
     } catch (error) {
-      console.log('Error updating budget', error.message);
+      console.log('Error updating budget', error);
       setError(error.message);
     }
   };
@@ -176,7 +176,7 @@ function UpdateBudgetPage() {
       await deleteBudget(budgetId);
       navigate('/budgets');
     } catch (error) {
-      console.log('Error deleting budget', error.message);
+      console.log('Error deleting budget', error);
       setError(error.message);
     }
   };
@@ -196,7 +196,7 @@ function UpdateBudgetPage() {
       setCategoryAllocation(budget.categoryAllocation);
     } catch (error) {
       console.log('Error retrieving budget', error);
-      setError(error);
+      setError(error.message);
     }
   };
 
@@ -376,10 +376,13 @@ function UpdateBudgetPage() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-
-            {error && <Text color='red.500'>{error}</Text>}
           </VStack>
         </form>
+        {error && (
+          <Text color='red.500' textAlign='center'>
+            {error}
+          </Text>
+        )}
       </Box>
     </>
   );

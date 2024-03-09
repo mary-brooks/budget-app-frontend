@@ -153,7 +153,7 @@ function AddBudgetPage() {
       navigate('/budgets');
     } catch (error) {
       console.log('Error adding budget', error);
-      setError(error);
+      setError(error.message);
     }
   };
 
@@ -280,10 +280,10 @@ function AddBudgetPage() {
             <Button type='submit' colorScheme='green' variant='solid'>
               Add Budget
             </Button>
+
+            {error && <Text color='red.500'>{error}</Text>}
           </VStack>
         </form>
-
-        {error && <Text color='red.500'>{error}</Text>}
       </Box>
     </>
   );

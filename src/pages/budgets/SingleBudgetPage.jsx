@@ -15,7 +15,7 @@ function SingleBudgetPage() {
       console.log(response);
       setBudget(response.data);
     } catch (error) {
-      console.log(error);
+      console.log('Error retrieving budget', error.message);
     }
   };
 

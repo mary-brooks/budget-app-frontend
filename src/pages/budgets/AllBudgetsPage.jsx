@@ -19,7 +19,9 @@ import { AuthContext } from '../../context/auth.context';
 
 function AllBudgetsPage() {
   const { user } = useContext(AuthContext);
+
   const [budgets, setBudgets] = useState([]);
+  const [error, setError] = useState(null);
 
   // Helper function to format the date
   const formatDate = dateString => {
@@ -33,7 +35,8 @@ function AllBudgetsPage() {
       console.log(response);
       setBudgets(response.data);
     } catch (error) {
-      console.log(error);
+      console.log('Error retrieving budgets', error);
+      setError(error.message);
     }
   };
 
@@ -113,6 +116,8 @@ function AllBudgetsPage() {
           Add Budget
         </Button>
       </Link>
+
+      {error && <Text color='red.500'>{error}</Text>}
     </VStack>
   );
 }
