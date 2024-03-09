@@ -166,12 +166,20 @@ function UpdateBudgetPage() {
       await updateBudget(requestBody, budgetId);
       navigate(`/budgets/${budgetId}`);
     } catch (error) {
-      console.log('Error updating budget', error);
-      setError(error);
+      console.log('Error updating budget', error.message);
+      setError(error.message);
     }
   };
 
-  const handleDelete = () => {};
+  const handleDelete = async () => {
+    try {
+      await deleteBudget(budgetId);
+      navigate('/budgets');
+    } catch (error) {
+      console.log('Error deleting budget', error.message);
+      setError(error.message);
+    }
+  };
 
   const getSingleBudget = async () => {
     try {
@@ -368,10 +376,10 @@ function UpdateBudgetPage() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+
+            {error && <Text color='red.500'>{error}</Text>}
           </VStack>
         </form>
-
-        {error && <Text color='red.500'>{error}</Text>}
       </Box>
     </>
   );

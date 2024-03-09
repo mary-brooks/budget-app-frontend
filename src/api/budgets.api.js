@@ -35,5 +35,5 @@ export const updateBudget = (updatedBudget, budgetId) => {
 };
 
 export const deleteBudget = budgetId => {
-  return axios.delete(`${baseURL}/budgets/${budgetId}}`);
+  return axios.delete(`${baseURL}/budgets/${budgetId}`);
 };
