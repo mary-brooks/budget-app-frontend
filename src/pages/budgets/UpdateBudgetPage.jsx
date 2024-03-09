@@ -1,9 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { getBudget, updateBudget } from '../../api/budgets.api';
+import { getBudget, updateBudget, deleteBudget } from '../../api/budgets.api';
 
 import {
+  AlertDialog,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogCloseButton,
+  AlertDialogContent,
+  AlertDialogOverlay,
   Heading,
   Box,
   Flex,
@@ -16,6 +23,8 @@ import {
   Button,
   IconButton,
   Text,
+  ButtonGroup,
+  useDisclosure,
 } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
@@ -44,6 +53,9 @@ function UpdateBudgetPage() {
 
   const { budgetId } = useParams();
   const navigate = useNavigate();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
 
   const handleCategoryChange = (index, value) => {
     const newCategoryAllocation = [...categoryAllocation];
@@ -158,6 +170,8 @@ function UpdateBudgetPage() {
       setError(error);
     }
   };
+
+  const handleDelete = () => {};
 
   const getSingleBudget = async () => {
     try {
@@ -308,9 +322,52 @@ function UpdateBudgetPage() {
               ))}
             </FormControl>
 
-            <Button type='submit' colorScheme='green' variant='solid'>
-              Update Budget
-            </Button>
+            <ButtonGroup>
+              <Button type='submit' colorScheme='green' variant='solid'>
+                Update Budget
+              </Button>
+
+              <Button onClick={onOpen} colorScheme='green' variant='outline'>
+                Delete Budget
+              </Button>
+            </ButtonGroup>
+
+            <AlertDialog
+              motionPreset='slideInBottom'
+              leastDestructiveRef={cancelRef}
+              onClose={onClose}
+              isOpen={isOpen}
+              isCentered
+            >
+              <AlertDialogOverlay />
+
+              <AlertDialogContent>
+                <AlertDialogHeader>Discard budget?</AlertDialogHeader>
+                <AlertDialogCloseButton />
+                <AlertDialogBody>
+                  Are you sure you want to discard this budget? It will be
+                  permenantly deleted.
+                </AlertDialogBody>
+                <AlertDialogFooter>
+                  <Button
+                    ref={cancelRef}
+                    onClick={onClose}
+                    colorScheme='green'
+                    variant='outline'
+                  >
+                    No
+                  </Button>
+                  <Button
+                    onClick={handleDelete}
+                    colorScheme='green'
+                    variant='solid'
+                    ml={3}
+                  >
+                    Yes
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </VStack>
         </form>
 
