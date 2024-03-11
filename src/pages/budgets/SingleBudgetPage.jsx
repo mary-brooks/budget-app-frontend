@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import {
   Button,
+  IconButton,
+  ButtonGroup,
   Box,
   Flex,
   VStack,
@@ -15,15 +17,16 @@ import {
   CircularProgress,
   Progress,
 } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
 import { getBudget } from '../../api/budgets.api';
-import { getAllTransactions } from '../../api/transactions.api';
+import { getRecentTransactions } from '../../api/transactions.api';
 import { useParams } from 'react-router-dom';
 
 function SingleBudgetPage() {
   const { budgetId } = useParams();
 
   const [budget, setBudget] = useState();
-  const [transactions, setTransactions] = useState([]);
+  const [recentTransactions, setRecentTransactions] = useState([]);
 
   // Helper function to format the date
   const formatDate = dateString => {
@@ -41,19 +44,19 @@ function SingleBudgetPage() {
     }
   };
 
-  const getTransactions = async () => {
+  const getLastThreeTransactions = async () => {
     try {
-      const response = await getAllTransactions(budgetId);
+      const response = await getRecentTransactions(budgetId, 3);
       console.log(response);
-      setTransactions(response.data);
+      setRecentTransactions(response.data);
     } catch (error) {
-      console.log('Error retrieving transactions', error);
+      console.log('Error retrieving 3 most recent transactions', error);
     }
   };
 
   useEffect(() => {
     getSingleBudget();
-    getTransactions();
+    getLastThreeTransactions();
   }, []);
 
   return (
@@ -156,22 +159,66 @@ function SingleBudgetPage() {
                 </Flex>
               </VStack>
 
-              <Heading size='lg' color='green.500' mb={6}>
-                Transactions:
-              </Heading>
-              <Button colorScheme='green' variant='outline'>
-                View all
-              </Button>
+              <Flex width='100%' justify='space-between' mb={4}>
+                <Heading size='lg' color='green.500'>
+                  Transactions:
+                </Heading>
+
+                <ButtonGroup>
+                  <Link to={`/budgets/${budget._id}/transactions`}>
+                    <Button colorScheme='green' variant='outline'>
+                      View all
+                    </Button>
+                  </Link>
+                  <Link to={`/budgets/${budget._id}/transactions/add`}>
+                    <IconButton
+                      aria-label='Add Category'
+                      icon={<AddIcon />}
+                      colorScheme='green'
+                      variant='outline'
+                    />
+                  </Link>
+                </ButtonGroup>
+              </Flex>
+              <VStack
+                divider={<StackDivider />}
+                spacing='4'
+                align='flex-start'
+                borderRadius='lg'
+                p={4}
+                m={2}
+                mb={8}
+              >
+                {recentTransactions &&
+                  recentTransactions.map(transaction => {
+                    return (
+                      <Flex justify='space-between' width='90%'>
+                        <Box>
+                          <Heading size='sm' mb={2}>
+                            {transaction.vendor}
+                          </Heading>
+                          <Box p={2} bg='green.50' borderRadius='lg'>
+                            <Text size='sm'>{transaction.category}</Text>
+                          </Box>
+                        </Box>
+                        <Box>
+                          <Text size='md' fontWeight='bold' mb={2}>
+                            {`€${transaction.amount}`}
+                          </Text>
+                          <Text>{`on ${formatDate(transaction.date)}`}</Text>
+                        </Box>
+                      </Flex>
+                    );
+                  })}
+              </VStack>
             </Box>
           </Flex>
 
-          <Flex padding={4} width='100%' justify='center' alignItems='center'>
-            <Link to={`/budgets/update/${budget._id}`}>
-              <Button colorScheme='green' variant='outline'>
-                Edit Budget
-              </Button>
-            </Link>
-          </Flex>
+          <Link to={`/budgets/update/${budget._id}`}>
+            <Button colorScheme='green' variant='outline'>
+              Edit Budget
+            </Button>
+          </Link>
         </>
       )}
     </>

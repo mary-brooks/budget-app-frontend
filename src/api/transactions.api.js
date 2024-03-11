@@ -5,6 +5,12 @@ export const getAllTransactions = budgetId => {
   return axios.get(`${baseURL}/budgets/${budgetId}/transactions`);
 };
 
+export const getRecentTransactions = (budgetId, limit) => {
+  return axios.get(
+    `${baseURL}/budgets/${budgetId}/transactions?limit=${limit}`
+  );
+};
+
 export const getTransaction = (budgetId, transactionId) => {
   return axios.get(
     `${baseURL}/budgets/${budgetId}/transactions/${transactionId}`
