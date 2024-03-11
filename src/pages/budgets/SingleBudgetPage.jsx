@@ -16,6 +16,13 @@ import {
   StatHelpText,
   CircularProgress,
   Progress,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { getBudget } from '../../api/budgets.api';
@@ -27,6 +34,17 @@ function SingleBudgetPage() {
 
   const [budget, setBudget] = useState();
   const [recentTransactions, setRecentTransactions] = useState([]);
+
+  // State and logic for Add Transaction modal
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onClose = () => {
+    setIsOpen(false);
+  };
+
+  const onOpen = () => {
+    setIsOpen(true);
+  };
 
   // Helper function to format the date
   const formatDate = dateString => {
@@ -170,14 +188,13 @@ function SingleBudgetPage() {
                       View all
                     </Button>
                   </Link>
-                  <Link to={`/budgets/${budget._id}/transactions/add`}>
-                    <IconButton
-                      aria-label='Add Category'
-                      icon={<AddIcon />}
-                      colorScheme='green'
-                      variant='outline'
-                    />
-                  </Link>
+                  <IconButton
+                    aria-label='Add Category'
+                    icon={<AddIcon />}
+                    colorScheme='green'
+                    variant='outline'
+                    onClick={onOpen}
+                  />
                 </ButtonGroup>
               </Flex>
               <VStack
@@ -219,6 +236,21 @@ function SingleBudgetPage() {
               Edit Budget
             </Button>
           </Link>
+
+          <Modal isOpen={isOpen} onClose={onClose} size='md'>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Add Transaction</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                {/* Your form component goes here */}
+                {/* Example: <TransactionForm onClose={onClose} /> */}
+              </ModalBody>
+              <ModalFooter>
+                {/* You can add footer buttons or actions here */}
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </>
       )}
     </>
