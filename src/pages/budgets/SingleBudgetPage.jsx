@@ -22,7 +22,6 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  ModalFooter,
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { getBudget } from '../../api/budgets.api';
@@ -35,12 +34,14 @@ function SingleBudgetPage() {
 
   const [budget, setBudget] = useState();
   const [recentTransactions, setRecentTransactions] = useState([]);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   // State and logic for Add Transaction modal
   const [isOpen, setIsOpen] = useState(false);
 
   const onClose = () => {
     setIsOpen(false);
+    setSelectedTransaction(null);
   };
 
   const onOpen = () => {
@@ -63,6 +64,12 @@ function SingleBudgetPage() {
     }
 
     onClose(); // Close the modal after adding a transaction
+  };
+
+  // Handler function for editing a transaction
+  const handleEditTransaction = transaction => {
+    setSelectedTransaction(transaction);
+    onOpen();
   };
 
   const getSingleBudget = async () => {
@@ -205,7 +212,7 @@ function SingleBudgetPage() {
 
                 <ButtonGroup>
                   <Link to={`/budgets/${budget._id}/transactions`}>
-                    <Button colorScheme='green' variant='outline'>
+                    <Button colorScheme='green' variant='solid'>
                       View all
                     </Button>
                   </Link>
@@ -229,7 +236,7 @@ function SingleBudgetPage() {
                 {recentTransactions &&
                   recentTransactions.map(transaction => {
                     return (
-                      <Flex justify='space-between' width='90%'>
+                      <Flex justify='space-between' width='100%'>
                         <Box>
                           <Heading size='sm' mb={2}>
                             {transaction.vendor}
@@ -243,6 +250,15 @@ function SingleBudgetPage() {
                             {`€${transaction.amount}`}
                           </Text>
                           <Text>{`on ${formatDate(transaction.date)}`}</Text>
+                        </Box>
+                        <Box>
+                          <Button
+                            colorScheme='green'
+                            variant='ghost'
+                            onClick={() => handleEditTransaction(transaction)}
+                          >
+                            Edit
+                          </Button>
                         </Box>
                       </Flex>
                     );
@@ -262,6 +278,7 @@ function SingleBudgetPage() {
                     budgetId={budgetId}
                     onClose={onClose}
                     onAddTransaction={handleAddTransaction}
+                    selectedTransaction={selectedTransaction}
                   />
                 }
               </ModalBody>

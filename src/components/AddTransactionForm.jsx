@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { addTransaction } from '../api/transactions.api';
 
 import {
@@ -11,7 +11,11 @@ import {
   Button,
 } from '@chakra-ui/react';
 
-function AddTransactionForm({ budgetId, onClose, onAddTransaction }) {
+function AddTransactionForm({
+  budgetId,
+  onAddTransaction,
+  selectedTransaction,
+}) {
   const [vendor, setVendor] = useState('');
   const [vendorError, setVendorError] = useState('');
 
@@ -57,6 +61,22 @@ function AddTransactionForm({ budgetId, onClose, onAddTransaction }) {
       setCategoryError('');
     }
   };
+
+  const formatDate = dateString => {
+    const dateObject = new Date(dateString);
+    const formattedDate = dateObject.toISOString().split('T')[0];
+    return formattedDate;
+  };
+
+  // If there is a selected transaction, populate form fields with it's details
+  useEffect(() => {
+    if (selectedTransaction) {
+      setVendor(selectedTransaction.vendor || '');
+      setAmount(selectedTransaction.amount || '');
+      setDate(formatDate(selectedTransaction.date) || '');
+      setCategory(selectedTransaction.category || '');
+    }
+  }, [selectedTransaction]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -164,9 +184,17 @@ function AddTransactionForm({ budgetId, onClose, onAddTransaction }) {
             <FormErrorMessage>{amountError}</FormErrorMessage>
           </FormControl>
 
-          <Button type='submit' colorScheme='green' variant='solid'>
-            Add Transaction
-          </Button>
+          {selectedTransaction && (
+            <Button type='submit' colorScheme='green' variant='solid' m={2}>
+              Update Transaction
+            </Button>
+          )}
+
+          {!selectedTransaction && (
+            <Button type='submit' colorScheme='green' variant='solid' m={2}>
+              Add Transaction
+            </Button>
+          )}
 
           {error && <Text color='red.500'>{error}</Text>}
         </VStack>
