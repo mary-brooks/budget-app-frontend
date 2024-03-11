@@ -27,6 +27,7 @@ import {
 import { AddIcon } from '@chakra-ui/icons';
 import { getBudget } from '../../api/budgets.api';
 import { getRecentTransactions } from '../../api/transactions.api';
+import AddTransactionForm from '../../components/AddTransactionForm';
 import { useParams } from 'react-router-dom';
 
 function SingleBudgetPage() {
@@ -50,6 +51,18 @@ function SingleBudgetPage() {
   const formatDate = dateString => {
     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  // handler function for adding a transaction
+  const handleAddTransaction = async () => {
+    try {
+      const response = await getRecentTransactions(budgetId, 3);
+      setRecentTransactions(response.data);
+    } catch (error) {
+      console.error('Error fetching recent transactions', error);
+    }
+
+    onClose(); // Close the modal after adding a transaction
   };
 
   const getSingleBudget = async () => {
@@ -92,10 +105,18 @@ function SingleBudgetPage() {
               </Heading>
             </VStack>
 
-            <Box borderWidth='1px' borderRadius='lg' padding={4} width='40%'>
-              <Heading size='lg' color='green.500' mb={6}>
-                Budget Overview:
-              </Heading>
+            <Box borderWidth='1px' borderRadius='lg' padding={6} width='40%'>
+              <Flex width='100%' justify='space-between' mb={4}>
+                <Heading size='lg' color='green.500'>
+                  Budget Overview:
+                </Heading>
+                <Link to={`/budgets/update/${budget._id}`}>
+                  <Button colorScheme='green' variant='outline'>
+                    Edit Budget
+                  </Button>
+                </Link>
+              </Flex>
+
               <VStack
                 divider={<StackDivider />}
                 spacing='4'
@@ -202,9 +223,8 @@ function SingleBudgetPage() {
                 spacing='4'
                 align='flex-start'
                 borderRadius='lg'
-                p={4}
+                p={2}
                 m={2}
-                mb={8}
               >
                 {recentTransactions &&
                   recentTransactions.map(transaction => {
@@ -231,24 +251,20 @@ function SingleBudgetPage() {
             </Box>
           </Flex>
 
-          <Link to={`/budgets/update/${budget._id}`}>
-            <Button colorScheme='green' variant='outline'>
-              Edit Budget
-            </Button>
-          </Link>
-
           <Modal isOpen={isOpen} onClose={onClose} size='md'>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Add Transaction</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                {/* Your form component goes here */}
-                {/* Example: <TransactionForm onClose={onClose} /> */}
+                {
+                  <AddTransactionForm
+                    budgetId={budgetId}
+                    onClose={onClose}
+                    onAddTransaction={handleAddTransaction}
+                  />
+                }
               </ModalBody>
-              <ModalFooter>
-                {/* You can add footer buttons or actions here */}
-              </ModalFooter>
             </ModalContent>
           </Modal>
         </>
