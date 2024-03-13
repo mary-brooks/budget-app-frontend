@@ -14,9 +14,6 @@ import UpdateBudgetPage from './pages/budgets/UpdateBudgetPage';
 
 // transactions
 import AllTransactionsPage from './pages/transactions/AllTransactionsPage';
-import AddTransactionPage from './pages/transactions/AddTransactionPage';
-import SingleTransactionPage from './pages/transactions/SingleTransactionPage';
-import UpdateTransactionPage from './pages/transactions/UpdateTransactionPage';
 
 // authentication components
 import IsPrivate from './components/IsPrivate';
@@ -87,30 +84,6 @@ function App() {
           element={
             <IsPrivate>
               <AllTransactionsPage />
-            </IsPrivate>
-          }
-        />
-        <Route
-          path='/budgets/:budgetId/transactions/add'
-          element={
-            <IsPrivate>
-              <AddTransactionPage />
-            </IsPrivate>
-          }
-        />
-        <Route
-          path='/budgets/:budgetId/transactions/:transactionId'
-          element={
-            <IsPrivate>
-              <SingleTransactionPage />
-            </IsPrivate>
-          }
-        />
-        <Route
-          path='/budgets/:budgetId/transactions/update/:transactionId'
-          element={
-            <IsPrivate>
-              <UpdateTransactionPage />
             </IsPrivate>
           }
         />
