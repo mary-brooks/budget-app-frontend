@@ -46,7 +46,13 @@ function AllTransactionsPage() {
 
       {!transactions && <p>Loading...</p>}
 
-      <Flex justify='center' align='center' width='100%'>
+      <Flex
+        justify='center'
+        align='center'
+        flexDirection='column'
+        width='100%'
+        gap={2}
+      >
         <VStack
           borderWidth='1px'
           borderRadius='lg'
@@ -93,6 +99,11 @@ function AllTransactionsPage() {
               );
             })}
         </VStack>
+        <Link to={`/budgets/${budgetId}`}>
+          <Button colorScheme='green' variant='solid'>
+            Back to budget
+          </Button>
+        </Link>
       </Flex>
     </>
   );
