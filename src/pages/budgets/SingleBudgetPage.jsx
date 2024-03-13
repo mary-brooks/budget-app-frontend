@@ -25,7 +25,10 @@ import {
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { getBudget } from '../../api/budgets.api';
-import { getRecentTransactions } from '../../api/transactions.api';
+import {
+  getRecentTransactions,
+  getAllTransactions,
+} from '../../api/transactions.api';
 import TransactionForm from '../../components/TransactionForm';
 import { useParams } from 'react-router-dom';
 
@@ -34,6 +37,7 @@ function SingleBudgetPage() {
 
   const [budget, setBudget] = useState();
   const [recentTransactions, setRecentTransactions] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   // State and logic for Add Transaction modal
@@ -52,6 +56,23 @@ function SingleBudgetPage() {
   const formatDate = dateString => {
     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  // Helper function to calculate total spending
+  const totalSpent = allTransactions => {
+    if (!budget || !transactions) return 0;
+
+    return allTransactions.reduce(
+      (acc, transaction) => acc + transaction.amount,
+      0
+    );
+  };
+
+  // Helper function to filter transactions by category
+  const transactionsByCategory = category => {
+    return transactions.filter(transaction => {
+      return transaction.category === category;
+    });
   };
 
   // handler function for adding or updating a transaction
@@ -92,9 +113,20 @@ function SingleBudgetPage() {
     }
   };
 
+  const getTransactions = async () => {
+    try {
+      const response = await getAllTransactions(budgetId);
+      console.log(response);
+      setTransactions(response.data);
+    } catch (error) {
+      console.log('Error retrieving transactions', error);
+    }
+  };
+
   useEffect(() => {
     getSingleBudget();
     getLastThreeTransactions();
+    getTransactions();
   }, []);
 
   return (
@@ -165,9 +197,26 @@ function SingleBudgetPage() {
               <Heading size='lg' color='green.500' mb={6}>
                 Total spending:
               </Heading>
-              <Box bg='green.50' borderRadius='lg' p={4} m={2} mb={8}>
-                <Progress colorScheme='green' size='md' value={20} mb={2} />
-                <Text fontSize='md'>€ of total budget remaining</Text>
+              <Box bg='green.50' borderRadius='lg' p={4} m={2}>
+                <Progress
+                  colorScheme='green'
+                  size='md'
+                  value={(totalSpent(transactions) / budget.totalIncome) * 100}
+                  mb={2}
+                />
+                <Text fontSize='md'>{`€${totalSpent(
+                  transactions
+                )} spent`}</Text>
+              </Box>
+              <Box p={4} m={2} mb={8}>
+                <Text fontSize='md'>{`€${
+                  budget.totalIncome - totalSpent(transactions)
+                } of total budget remaining`}</Text>
+                <Text>{`Spend less than €${
+                  budget.totalIncome -
+                  totalSpent(transactions) -
+                  budget.savingsGoal
+                } to meet your savings goal`}</Text>
               </Box>
 
               <VStack width='100%' align='flex-start' spacing='4' mb={4}>
@@ -188,14 +237,22 @@ function SingleBudgetPage() {
                         alignItems='center'
                       >
                         <CircularProgress
-                          value={30}
+                          value={
+                            (totalSpent(transactionsByCategory(category.name)) /
+                              category.amount) *
+                            100
+                          }
                           color='green.500'
                           thickness='15px'
                         />
+
                         <Box>
                           <Stat>
                             <StatLabel>{category.name}</StatLabel>
-                            <StatNumber>€</StatNumber>
+                            <StatNumber>{`€${
+                              category.amount -
+                              totalSpent(transactionsByCategory(category.name))
+                            }`}</StatNumber>
                             <StatHelpText>{`remaining of €${category.amount}`}</StatHelpText>
                           </Stat>
                         </Box>
