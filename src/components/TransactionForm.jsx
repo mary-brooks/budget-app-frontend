@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
-import { addTransaction } from '../api/transactions.api';
+import {
+  addTransaction,
+  updateTransaction,
+  deleteTransaction,
+} from '../api/transactions.api';
 
 import {
   VStack,
@@ -9,11 +13,16 @@ import {
   Input,
   Select,
   Button,
+  ButtonGroup,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 
 function AddTransactionForm({
   budgetId,
-  onAddTransaction,
+  onUpdateTransaction,
   selectedTransaction,
 }) {
   const [vendor, setVendor] = useState('');
@@ -29,6 +38,7 @@ function AddTransactionForm({
   const [categoryError, setCategoryError] = useState('');
 
   const [error, setError] = useState(null);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   const handleVendorBlur = () => {
     if (!vendor || vendor.trim() === '') {
@@ -119,10 +129,29 @@ function AddTransactionForm({
     };
 
     try {
-      await addTransaction(requestBody, budgetId);
-      onAddTransaction();
+      if (selectedTransaction) {
+        await updateTransaction(requestBody, budgetId, selectedTransaction._id);
+      } else {
+        await addTransaction(requestBody, budgetId);
+      }
+
+      onUpdateTransaction();
     } catch (error) {
-      console.log('Error adding transaction', error);
+      console.log('Error handling transaction', error);
+      setError(error.message);
+    }
+  };
+
+  const handleDelete = async () => {
+    setShowDeleteAlert(true); // Show delete alert
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await deleteTransaction(budgetId, selectedTransaction._id);
+      onUpdateTransaction();
+    } catch (error) {
+      console.log('Error deleting transaction', error);
       setError(error.message);
     }
   };
@@ -185,9 +214,18 @@ function AddTransactionForm({
           </FormControl>
 
           {selectedTransaction && (
-            <Button type='submit' colorScheme='green' variant='solid' m={2}>
-              Update Transaction
-            </Button>
+            <ButtonGroup>
+              <Button type='submit' colorScheme='green' variant='solid'>
+                Update Transaction
+              </Button>
+              <Button
+                colorScheme='green'
+                variant='outline'
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            </ButtonGroup>
           )}
 
           {!selectedTransaction && (
@@ -196,7 +234,37 @@ function AddTransactionForm({
             </Button>
           )}
 
-          {error && <Text color='red.500'>{error}</Text>}
+          {error && <Alert status='error'>{error}</Alert>}
+
+          {/* Delete confirmation alert */}
+          {showDeleteAlert && (
+            <Alert
+              status='warning'
+              flexDirection='column'
+              alignItems='center'
+              justifyContent='center'
+              textAlign='center'
+              gap={2}
+            >
+              <AlertIcon />
+              <AlertTitle>
+                Are you sure you want to delete this transaction?
+              </AlertTitle>
+              <AlertDescription>This action cannot be undone.</AlertDescription>
+              <ButtonGroup>
+                <Button colorScheme='red' size='sm' onClick={confirmDelete}>
+                  Delete
+                </Button>
+                <Button
+                  colorScheme='gray'
+                  size='sm'
+                  onClick={() => setShowDeleteAlert(false)}
+                >
+                  Cancel
+                </Button>
+              </ButtonGroup>
+            </Alert>
+          )}
         </VStack>
       </form>
     </>

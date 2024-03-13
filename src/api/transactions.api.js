@@ -21,9 +21,13 @@ export const addTransaction = (transaction, budgetId) => {
   return axios.post(`${baseURL}/budgets/${budgetId}/transactions`, transaction);
 };
 
-export const updateTransaction = (updatedTransaction, budgetId) => {
+export const updateTransaction = (
+  updatedTransaction,
+  budgetId,
+  transactionId
+) => {
   return axios.put(
-    `${baseURL}/budgets/${budgetId}/transactions/${updatedTransaction._id}`,
+    `${baseURL}/budgets/${budgetId}/transactions/${transactionId}`,
     updatedTransaction
   );
 };

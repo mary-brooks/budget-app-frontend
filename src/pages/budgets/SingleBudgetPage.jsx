@@ -26,7 +26,7 @@ import {
 import { AddIcon } from '@chakra-ui/icons';
 import { getBudget } from '../../api/budgets.api';
 import { getRecentTransactions } from '../../api/transactions.api';
-import AddTransactionForm from '../../components/AddTransactionForm';
+import TransactionForm from '../../components/TransactionForm';
 import { useParams } from 'react-router-dom';
 
 function SingleBudgetPage() {
@@ -54,8 +54,8 @@ function SingleBudgetPage() {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  // handler function for adding a transaction
-  const handleAddTransaction = async () => {
+  // handler function for adding or updating a transaction
+  const handleUpdateTransaction = async () => {
     try {
       const response = await getRecentTransactions(budgetId, 3);
       setRecentTransactions(response.data);
@@ -167,7 +167,7 @@ function SingleBudgetPage() {
               </Heading>
               <Box bg='green.50' borderRadius='lg' p={4} m={2} mb={8}>
                 <Progress colorScheme='green' size='md' value={20} mb={2} />
-                <Text size='md'>€ of total budget remaining</Text>
+                <Text fontSize='md'>€ of total budget remaining</Text>
               </Box>
 
               <VStack width='100%' align='flex-start' spacing='4' mb={4}>
@@ -236,22 +236,33 @@ function SingleBudgetPage() {
                 {recentTransactions &&
                   recentTransactions.map(transaction => {
                     return (
-                      <Flex justify='space-between' width='100%'>
-                        <Box>
+                      <Flex
+                        key={transaction._id}
+                        justify='space-between'
+                        width='100%'
+                      >
+                        <Box w='30%'>
                           <Heading size='sm' mb={2}>
                             {transaction.vendor}
                           </Heading>
-                          <Box p={2} bg='green.50' borderRadius='lg'>
-                            <Text size='sm'>{transaction.category}</Text>
+                          <Box
+                            p={2}
+                            bg='green.50'
+                            borderRadius='lg'
+                            w='fit-content'
+                          >
+                            <Text fontSize='sm'>{transaction.category}</Text>
                           </Box>
                         </Box>
-                        <Box>
-                          <Text size='md' fontWeight='bold' mb={2}>
+                        <Box w='30%'>
+                          <Text fontSize='md' fontWeight='bold' mb={2}>
                             {`€${transaction.amount}`}
                           </Text>
-                          <Text>{`on ${formatDate(transaction.date)}`}</Text>
+                          <Text fontSize='sm'>{`on ${formatDate(
+                            transaction.date
+                          )}`}</Text>
                         </Box>
-                        <Box>
+                        <Box w='10%'>
                           <Button
                             colorScheme='green'
                             variant='ghost'
@@ -274,10 +285,10 @@ function SingleBudgetPage() {
               <ModalCloseButton />
               <ModalBody>
                 {
-                  <AddTransactionForm
+                  <TransactionForm
                     budgetId={budgetId}
                     onClose={onClose}
-                    onAddTransaction={handleAddTransaction}
+                    onUpdateTransaction={handleUpdateTransaction}
                     selectedTransaction={selectedTransaction}
                   />
                 }
