@@ -27,8 +27,10 @@ function AllTransactionsPage() {
   const getTransactions = async () => {
     try {
       const response = await getAllTransactions(budgetId);
-      console.log(response);
-      setTransactions(response.data);
+      const sortedTransactions = response.data.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+      setTransactions(sortedTransactions);
     } catch (error) {
       console.log('Error retrieving transactions', error);
     }
@@ -100,7 +102,7 @@ function AllTransactionsPage() {
             })}
         </VStack>
         <Link to={`/budgets/${budgetId}`}>
-          <Button colorScheme='green' variant='solid'>
+          <Button colorScheme='green' variant='solid' mb={6}>
             Back to budget
           </Button>
         </Link>
