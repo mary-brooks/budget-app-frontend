@@ -80,6 +80,14 @@ function SingleBudgetPage() {
     try {
       const response = await getRecentTransactions(budgetId, 3);
       setRecentTransactions(response.data);
+
+      // Fetch updated budget data
+      const updatedBudget = await getBudget(budgetId);
+      setBudget(updatedBudget.data);
+
+      // Fetch all transactions
+      const updatedTransactions = await getAllTransactions(budgetId);
+      setTransactions(updatedTransactions.data);
     } catch (error) {
       console.error('Error fetching recent transactions', error);
     }
