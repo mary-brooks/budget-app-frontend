@@ -75,6 +75,17 @@ function SingleBudgetPage() {
     });
   };
 
+  // Helper function to calculate remaining budget
+  const remainingBudget = () => {
+    return budget.totalIncome - (totalSpent(transactions) + budget.savingsGoal);
+  };
+
+  // Helper function to determine if the user has overspent
+  const hasOverspent = () => remainingBudget() < 0;
+
+  // Helper function to get the amount overspent
+  const overspentAmount = () => Math.abs(remainingBudget());
+
   // handler function for adding or updating a transaction
   const handleUpdateTransaction = async () => {
     try {
@@ -205,27 +216,61 @@ function SingleBudgetPage() {
               <Heading size='lg' color='green.500' mb={6}>
                 Total spending:
               </Heading>
-              <Box bg='green.50' borderRadius='lg' p={4} m={2}>
+
+              <Box p={4} m={2} mb={8} bg='green.100' borderRadius='lg'>
                 <Progress
                   colorScheme='green'
                   size='md'
                   value={(totalSpent(transactions) / budget.totalIncome) * 100}
-                  mb={2}
                 />
-                <Text fontSize='md'>{`€${totalSpent(
-                  transactions
-                )} spent`}</Text>
               </Box>
-              <Box p={4} m={2} mb={8}>
-                <Text fontSize='md'>{`€${
-                  budget.totalIncome - totalSpent(transactions)
-                } of total budget remaining`}</Text>
-                <Text>{`Spend less than €${
-                  budget.totalIncome -
-                  totalSpent(transactions) -
-                  budget.savingsGoal
-                } to meet your savings goal`}</Text>
-              </Box>
+              <VStack
+                divider={<StackDivider />}
+                spacing='4'
+                align='flex-start'
+                bg='green.50'
+                borderRadius='lg'
+                p={4}
+                m={2}
+                mb={8}
+              >
+                <Flex justify='space-between' width='100%'>
+                  <Heading size='md' color='green.500'>
+                    Spent:
+                  </Heading>
+                  <Text fontSize='md' fontWeight='bold' pt={2}>
+                    {`€${totalSpent(transactions)}`}
+                  </Text>
+                </Flex>
+
+                <Flex justify='space-between' width='100%'>
+                  <Heading size='md' color='green.500'>
+                    Remaining Income:
+                  </Heading>
+                  <Text fontSize='md' fontWeight='bold' pt={2}>
+                    {`€${remainingBudget() + budget.savingsGoal}`}
+                  </Text>
+                </Flex>
+              </VStack>
+
+              <Heading size='lg' color='green.500' mb={6}>
+                Saving:
+              </Heading>
+              {hasOverspent() ? (
+                <Box p={4} m={2} mb={8} bg='orange.100' borderRadius='lg'>
+                  <Text fontSize='md' fontWeight='bold'>
+                    You've overspent by €{overspentAmount()}. Consider amending
+                    your budget.
+                  </Text>
+                </Box>
+              ) : (
+                <Box p={4} m={2} mb={8} bg='green.100' borderRadius='lg'>
+                  <Text fontSize='md' fontWeight='bold'>
+                    You're on track! Spend less than €{remainingBudget()} to
+                    meet your savings goal.
+                  </Text>
+                </Box>
+              )}
 
               <VStack width='100%' align='flex-start' spacing='4' mb={4}>
                 <Heading size='lg' color='green.500'>
