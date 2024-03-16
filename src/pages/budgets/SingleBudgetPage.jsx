@@ -23,13 +23,18 @@ import {
   ModalCloseButton,
   ModalBody,
 } from '@chakra-ui/react';
+
 import { AddIcon } from '@chakra-ui/icons';
+
 import { getBudget } from '../../api/budgets.api';
+
 import {
   getRecentTransactions,
   getAllTransactions,
 } from '../../api/transactions.api';
+
 import TransactionForm from '../../components/TransactionForm';
+import SpendingPieChart from '../../components/SpendingPieChart';
 import { useParams } from 'react-router-dom';
 
 function SingleBudgetPage() {
@@ -89,7 +94,7 @@ function SingleBudgetPage() {
   // handler function for adding or updating a transaction
   const handleUpdateTransaction = async () => {
     try {
-      const response = await getRecentTransactions(budgetId, 3);
+      const response = await getRecentTransactions(budgetId, 5);
       setRecentTransactions(response.data);
 
       // Fetch updated budget data
@@ -122,9 +127,9 @@ function SingleBudgetPage() {
     }
   };
 
-  const getLastThreeTransactions = async () => {
+  const getLatestTransactions = async () => {
     try {
-      const response = await getRecentTransactions(budgetId, 3);
+      const response = await getRecentTransactions(budgetId, 5);
       console.log(response);
       setRecentTransactions(response.data);
     } catch (error) {
@@ -144,7 +149,7 @@ function SingleBudgetPage() {
 
   useEffect(() => {
     getSingleBudget();
-    getLastThreeTransactions();
+    getLatestTransactions();
     getTransactions();
   }, []);
 
@@ -156,17 +161,11 @@ function SingleBudgetPage() {
             {budget.name}
           </Heading>
 
-          <Flex justify='space-around' p={4} mb={4} width='100%'>
-            <VStack borderWidth='1px' borderRadius='lg' padding={4} width='40%'>
-              <Heading size='xl' color='green.500'>
-                Spending
-              </Heading>
-            </VStack>
-
+          <Flex justify='space-evenly' p={4} mb={4} width='100%'>
             <Box borderWidth='1px' borderRadius='lg' padding={6} width='40%'>
-              <Flex width='100%' justify='space-between' mb={4}>
+              <Flex width='100%' justify='space-between' mb={8}>
                 <Heading size='lg' color='green.500'>
-                  Budget Overview:
+                  Budget Overview
                 </Heading>
                 <Link to={`/budgets/update/${budget._id}`}>
                   <Button colorScheme='green' variant='outline'>
@@ -213,48 +212,8 @@ function SingleBudgetPage() {
                 </Flex>
               </VStack>
 
-              <Heading size='lg' color='green.500' mb={6}>
-                Total spending:
-              </Heading>
-
-              <Box p={4} m={2} mb={8} bg='green.100' borderRadius='lg'>
-                <Progress
-                  colorScheme='green'
-                  size='md'
-                  value={(totalSpent(transactions) / budget.totalIncome) * 100}
-                />
-              </Box>
-              <VStack
-                divider={<StackDivider />}
-                spacing='4'
-                align='flex-start'
-                bg='green.50'
-                borderRadius='lg'
-                p={4}
-                m={2}
-                mb={8}
-              >
-                <Flex justify='space-between' width='100%'>
-                  <Heading size='md' color='green.500'>
-                    Spent:
-                  </Heading>
-                  <Text fontSize='md' fontWeight='bold' pt={2}>
-                    {`€${totalSpent(transactions)}`}
-                  </Text>
-                </Flex>
-
-                <Flex justify='space-between' width='100%'>
-                  <Heading size='md' color='green.500'>
-                    Remaining Income:
-                  </Heading>
-                  <Text fontSize='md' fontWeight='bold' pt={2}>
-                    {`€${remainingBudget() + budget.savingsGoal}`}
-                  </Text>
-                </Flex>
-              </VStack>
-
-              <Heading size='lg' color='green.500' mb={6}>
-                Saving:
+              <Heading size='lg' color='green.500' mb={8}>
+                Savings
               </Heading>
               {hasOverspent() ? (
                 <Box p={4} m={2} mb={8} bg='orange.100' borderRadius='lg'>
@@ -271,49 +230,6 @@ function SingleBudgetPage() {
                   </Text>
                 </Box>
               )}
-
-              <VStack width='100%' align='flex-start' spacing='4' mb={4}>
-                <Heading size='lg' color='green.500'>
-                  Spending by category:
-                </Heading>
-                <Flex width='100%' justify='space-between' wrap='wrap'>
-                  {budget.categoryAllocation.map(category => {
-                    return (
-                      <Flex
-                        key={category.name}
-                        width='45%'
-                        bg='green.50'
-                        borderRadius='lg'
-                        p={4}
-                        m={2}
-                        justify='space-around'
-                        alignItems='center'
-                      >
-                        <CircularProgress
-                          value={
-                            (totalSpent(transactionsByCategory(category.name)) /
-                              category.amount) *
-                            100
-                          }
-                          color='green.500'
-                          thickness='15px'
-                        />
-
-                        <Box>
-                          <Stat>
-                            <StatLabel>{category.name}</StatLabel>
-                            <StatNumber>{`€${
-                              category.amount -
-                              totalSpent(transactionsByCategory(category.name))
-                            }`}</StatNumber>
-                            <StatHelpText>{`remaining of €${category.amount}`}</StatHelpText>
-                          </Stat>
-                        </Box>
-                      </Flex>
-                    );
-                  })}
-                </Flex>
-              </VStack>
 
               <Flex width='100%' justify='space-between' mb={4}>
                 <Heading size='lg' color='green.500'>
@@ -374,7 +290,7 @@ function SingleBudgetPage() {
                           </Heading>
                           <Box
                             p={2}
-                            bg='green.50'
+                            bg='green.100'
                             borderRadius='lg'
                             w='fit-content'
                           >
@@ -401,6 +317,98 @@ function SingleBudgetPage() {
                       </Flex>
                     );
                   })}
+              </VStack>
+            </Box>
+
+            <Box borderWidth='1px' borderRadius='lg' padding={6} width='50%'>
+              <Heading size='lg' color='green.500' mb={6}>
+                Spending Overview
+              </Heading>
+              <Flex mb={6} width='100%' justify='center' align='center'>
+                <SpendingPieChart transactions={transactions} />
+              </Flex>
+
+              <Heading size='lg' color='green.500' mb={6}>
+                Total spending
+              </Heading>
+
+              <Box p={4} m={2} mb={8} bg='green.100' borderRadius='lg'>
+                <Progress
+                  colorScheme='green'
+                  size='md'
+                  value={(totalSpent(transactions) / budget.totalIncome) * 100}
+                />
+              </Box>
+              <VStack
+                divider={<StackDivider />}
+                spacing='4'
+                align='flex-start'
+                bg='green.50'
+                borderRadius='lg'
+                p={4}
+                m={2}
+                mb={8}
+              >
+                <Flex justify='space-between' width='100%'>
+                  <Heading size='md' color='green.500'>
+                    Spent:
+                  </Heading>
+                  <Text fontSize='md' fontWeight='bold' pt={2}>
+                    {`€${totalSpent(transactions)}`}
+                  </Text>
+                </Flex>
+
+                <Flex justify='space-between' width='100%'>
+                  <Heading size='md' color='green.500'>
+                    Remaining Income:
+                  </Heading>
+                  <Text fontSize='md' fontWeight='bold' pt={2}>
+                    {`€${remainingBudget() + budget.savingsGoal}`}
+                  </Text>
+                </Flex>
+              </VStack>
+
+              <VStack width='100%' align='flex-start' spacing='4' mb={8}>
+                <Heading size='lg' color='green.500'>
+                  Spending by category
+                </Heading>
+                <Flex width='100%' justify='space-between' wrap='wrap'>
+                  {budget.categoryAllocation.map(category => {
+                    return (
+                      <Flex
+                        key={category.name}
+                        width='30%'
+                        bg='green.50'
+                        borderRadius='lg'
+                        p={4}
+                        m={2}
+                        justify='space-between'
+                        alignItems='center'
+                      >
+                        <CircularProgress
+                          value={
+                            (totalSpent(transactionsByCategory(category.name)) /
+                              category.amount) *
+                            100
+                          }
+                          color='green.500'
+                          thickness='15px'
+                        />
+
+                        <Box>
+                          <Stat>
+                            <StatLabel>{category.name}</StatLabel>
+                            <StatNumber>{`€${
+                              category.amount -
+                              totalSpent(transactionsByCategory(category.name))
+                            }`}</StatNumber>
+                            <StatHelpText>{`remaining of €${category.amount}`}</StatHelpText>
+                          </Stat>
+                        </Box>
+                      </Flex>
+                    );
+                  })}
+                </Flex>
               </VStack>
             </Box>
           </Flex>
