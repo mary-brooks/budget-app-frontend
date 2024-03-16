@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
 import { getAllTransactions } from '../../api/transactions.api';
+import TransactionForm from '../../components/TransactionForm';
 
 import {
   Button,
@@ -11,17 +13,60 @@ import {
   Heading,
   StackDivider,
   Text,
+  IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
 } from '@chakra-ui/react';
+
+import { AddIcon } from '@chakra-ui/icons';
 
 function AllTransactionsPage() {
   const { budgetId } = useParams();
 
   const [transactions, setTransactions] = useState([]);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   // Helper function to format the date
   const formatDate = dateString => {
     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  // State and logic for Add Transaction modal
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onClose = () => {
+    setIsOpen(false);
+    setSelectedTransaction(null);
+  };
+
+  const onOpen = () => {
+    setIsOpen(true);
+  };
+
+  // handler function for adding or updating a transaction
+  const handleUpdateTransaction = async () => {
+    try {
+      const response = await getAllTransactions(budgetId);
+      const sortedTransactions = response.data.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+      setTransactions(sortedTransactions);
+    } catch (error) {
+      console.error('Error updating transaction', error);
+    }
+
+    onClose(); // Close the modal after adding a transaction
+  };
+
+  // Handler function for editing a transaction
+  const handleEditTransaction = transaction => {
+    setSelectedTransaction(transaction);
+    onOpen();
   };
 
   const getTransactions = async () => {
@@ -55,6 +100,15 @@ function AllTransactionsPage() {
         width='100%'
         gap={2}
       >
+        <Flex width='40%' justify='flex-end'>
+          <IconButton
+            aria-label='Add Category'
+            icon={<AddIcon />}
+            colorScheme='green'
+            variant='outline'
+            onClick={onOpen}
+          />
+        </Flex>
         <VStack
           borderWidth='1px'
           borderRadius='lg'
@@ -92,7 +146,7 @@ function AllTransactionsPage() {
                     <Button
                       colorScheme='green'
                       variant='ghost'
-                      // onClick={() => handleEditTransaction(transaction)}
+                      onClick={() => handleEditTransaction(transaction)}
                     >
                       Edit
                     </Button>
@@ -107,6 +161,24 @@ function AllTransactionsPage() {
           </Button>
         </Link>
       </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose} size='md'>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add Transaction</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {
+              <TransactionForm
+                budgetId={budgetId}
+                onClose={onClose}
+                onUpdateTransaction={handleUpdateTransaction}
+                selectedTransaction={selectedTransaction}
+              />
+            }
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 }

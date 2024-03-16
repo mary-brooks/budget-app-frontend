@@ -214,7 +214,7 @@ function AddTransactionForm({
           </FormControl>
 
           {selectedTransaction && (
-            <ButtonGroup>
+            <ButtonGroup mb={6}>
               <Button type='submit' colorScheme='green' variant='solid'>
                 Update Transaction
               </Button>
@@ -229,7 +229,13 @@ function AddTransactionForm({
           )}
 
           {!selectedTransaction && (
-            <Button type='submit' colorScheme='green' variant='solid' m={2}>
+            <Button
+              type='submit'
+              colorScheme='green'
+              variant='solid'
+              m={2}
+              mb={6}
+            >
               Add Transaction
             </Button>
           )}
