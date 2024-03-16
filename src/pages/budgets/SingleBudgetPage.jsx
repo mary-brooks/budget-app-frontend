@@ -290,6 +290,23 @@ function SingleBudgetPage() {
                   />
                 </ButtonGroup>
               </Flex>
+
+              <Flex w='100%' justify='center' align='center'>
+                {recentTransactions.length === 0 && (
+                  <Box
+                    mt={6}
+                    p={2}
+                    bg='green.50'
+                    borderRadius='lg'
+                    w='fit-content'
+                  >
+                    <Text fontSize='sm' fontStyle='italic'>
+                      Your transactions will appear here.
+                    </Text>
+                  </Box>
+                )}
+              </Flex>
+
               <VStack
                 divider={<StackDivider />}
                 spacing='4'

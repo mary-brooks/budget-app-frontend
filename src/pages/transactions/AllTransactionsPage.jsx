@@ -109,6 +109,8 @@ function AllTransactionsPage() {
             onClick={onOpen}
           />
         </Flex>
+
+        <Flex></Flex>
         <VStack
           borderWidth='1px'
           borderRadius='lg'
@@ -118,6 +120,16 @@ function AllTransactionsPage() {
           p={6}
           m={2}
         >
+          {transactions.length === 0 && (
+            <Flex w='100%' justify='center' align='center'>
+              <Box p={2} bg='green.50' borderRadius='lg' w='fit-content'>
+                <Text fontSize='sm' fontStyle='italic'>
+                  Your transactions will appear here.
+                </Text>
+              </Box>
+            </Flex>
+          )}
+
           {transactions &&
             transactions.map(transaction => {
               return (
