@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 import {
   addTransaction,
@@ -18,6 +19,7 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  Checkbox,
 } from '@chakra-ui/react';
 
 function AddTransactionForm({
@@ -25,6 +27,8 @@ function AddTransactionForm({
   onUpdateTransaction,
   selectedTransaction,
 }) {
+  const CURRENCY_API_KEY = `${import.meta.env.CURRENCY_API_KEY}`;
+
   const [vendor, setVendor] = useState('');
   const [vendorError, setVendorError] = useState('');
 
@@ -36,6 +40,9 @@ function AddTransactionForm({
 
   const [category, setCategory] = useState('');
   const [categoryError, setCategoryError] = useState('');
+
+  const [currency, setCurrency] = useState('EUR');
+  const [isTransactionAbroad, setIsTransactionAbroad] = useState(false);
 
   const [error, setError] = useState(null);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
@@ -121,8 +128,33 @@ function AddTransactionForm({
     setCategoryError('');
     setAmountError('');
 
+    let convertedAmount = amount;
+
+    if (isTransactionAbroad) {
+      try {
+        const response = await axios.get(
+          'https://api.freecurrencyapi.com/v1/latest',
+          {
+            params: {
+              apikey: CURRENCY_API_KEY,
+              base_currency: 'EUR',
+              currencies: currency,
+            },
+          }
+        );
+
+        // Extract conversion rate from the response based on the selected currency
+        const conversionRate = response.data.data[currency];
+
+        // Multiply user's inputted amount by the conversion rate
+        convertedAmount = (amount / conversionRate).toFixed(2);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     const requestBody = {
-      amount,
+      amount: convertedAmount,
       vendor,
       category,
       date,
@@ -212,6 +244,37 @@ function AddTransactionForm({
             />
             <FormErrorMessage>{amountError}</FormErrorMessage>
           </FormControl>
+
+          <FormControl>
+            <Checkbox
+              colorScheme='green'
+              checked={isTransactionAbroad}
+              onChange={() => setIsTransactionAbroad(!isTransactionAbroad)}
+            >
+              Transaction abroad
+            </Checkbox>
+          </FormControl>
+
+          {isTransactionAbroad && (
+            <FormControl>
+              <FormLabel>Currency:</FormLabel>
+              <Select
+                placeholder='Select Currency'
+                value={currency}
+                onChange={e => setCurrency(e.target.value)}
+              >
+                <option>GBP</option>
+                <option>CHF</option>
+                <option>USD</option>
+                <option>CAD</option>
+                <option>AUD</option>
+                <option>NZD</option>
+                <option>JYP</option>
+                <option>HKD</option>
+                <option>CNH</option>
+              </Select>
+            </FormControl>
+          )}
 
           {selectedTransaction && (
             <ButtonGroup mb={6}>
