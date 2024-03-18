@@ -161,256 +161,344 @@ function SingleBudgetPage() {
             {budget.name}
           </Heading>
 
-          <Flex justify='space-evenly' p={4} mb={4} width='100%'>
-            <Box borderWidth='1px' borderRadius='lg' padding={6} width='40%'>
-              <Flex width='100%' justify='space-between' mb={8}>
-                <Heading size='lg' color='green.500'>
-                  Budget Overview
-                </Heading>
-                <Link to={`/budgets/update/${budget._id}`}>
-                  <Button colorScheme='green' variant='outline'>
-                    Edit Budget
-                  </Button>
-                </Link>
-              </Flex>
-
-              <VStack
-                divider={<StackDivider />}
-                spacing='4'
-                align='flex-start'
-                bg='green.50'
+          <Flex
+            justify='space-evenly'
+            align='flex-start'
+            p={4}
+            mb={4}
+            width='100%'
+          >
+            <Flex
+              justify='center'
+              direction='column'
+              align='flex-start'
+              w='40%'
+            >
+              <Box
+                borderWidth='1px'
                 borderRadius='lg'
-                p={4}
-                m={2}
-                mb={8}
+                padding={6}
+                width='100%'
+                mb={6}
               >
-                <Flex justify='space-between' width='100%'>
-                  <Heading size='md' color='green.500'>
-                    Date:
+                <Flex width='100%' justify='space-between' mb={8}>
+                  <Heading size='lg' color='green.500'>
+                    Budget Overview
                   </Heading>
-                  <Text fontSize='md' fontWeight='bold' pt={2}>{`${formatDate(
-                    budget.startDate
-                  )} - ${formatDate(budget.endDate)}`}</Text>
-                </Flex>
-
-                <Flex justify='space-between' width='100%'>
-                  <Heading size='md' color='green.500'>
-                    Total Income:
-                  </Heading>
-                  <Text fontSize='md' fontWeight='bold' pt={2}>
-                    {`€${budget.totalIncome}`}
-                  </Text>
-                </Flex>
-
-                <Flex justify='space-between' width='100%'>
-                  <Heading size='md' color='green.500'>
-                    Savings Goal:
-                  </Heading>
-                  <Text fontSize='md' fontWeight='bold' pt={2}>
-                    {`€${budget.savingsGoal}`}
-                  </Text>
-                </Flex>
-              </VStack>
-
-              <Heading size='lg' color='green.500' mb={8}>
-                Savings
-              </Heading>
-              {hasOverspent() ? (
-                <Box p={4} m={2} mb={8} bg='orange.100' borderRadius='lg'>
-                  <Text fontSize='md' fontWeight='bold'>
-                    You've overspent by €{overspentAmount()}. Consider amending
-                    your budget.
-                  </Text>
-                </Box>
-              ) : (
-                <Box p={4} m={2} mb={8} bg='green.100' borderRadius='lg'>
-                  <Text fontSize='md' fontWeight='bold'>
-                    You're on track! Spend less than €{remainingBudget()} to
-                    meet your savings goal.
-                  </Text>
-                </Box>
-              )}
-
-              <Flex width='100%' justify='space-between' mb={4}>
-                <Heading size='lg' color='green.500'>
-                  Transactions:
-                </Heading>
-
-                <ButtonGroup>
-                  <Link to={`/budgets/${budget._id}/transactions`}>
-                    <Button colorScheme='green' variant='solid'>
-                      View all
+                  <Link to={`/budgets/update/${budget._id}`}>
+                    <Button colorScheme='green' variant='outline'>
+                      Edit Budget
                     </Button>
                   </Link>
-                  <IconButton
-                    aria-label='Add Category'
-                    icon={<AddIcon />}
-                    colorScheme='green'
-                    variant='outline'
-                    onClick={onOpen}
-                  />
-                </ButtonGroup>
-              </Flex>
+                </Flex>
 
-              <Flex w='100%' justify='center' align='center'>
-                {recentTransactions.length === 0 && (
-                  <Box
-                    mt={6}
-                    p={2}
-                    bg='green.50'
-                    borderRadius='lg'
-                    w='fit-content'
-                  >
-                    <Text fontSize='sm' fontStyle='italic'>
-                      Your transactions will appear here.
+                <VStack
+                  divider={<StackDivider />}
+                  spacing='4'
+                  align='flex-start'
+                  bg='green.50'
+                  borderRadius='lg'
+                  p={4}
+                  m={2}
+                >
+                  <Flex justify='space-between' width='100%'>
+                    <Heading size='md' color='green.500'>
+                      Date:
+                    </Heading>
+                    <Text fontSize='md' fontWeight='bold' pt={2}>{`${formatDate(
+                      budget.startDate
+                    )} - ${formatDate(budget.endDate)}`}</Text>
+                  </Flex>
+
+                  <Flex justify='space-between' width='100%'>
+                    <Heading size='md' color='green.500'>
+                      Total Income:
+                    </Heading>
+                    <Text fontSize='md' fontWeight='bold' pt={2}>
+                      {`€${budget.totalIncome}`}
+                    </Text>
+                  </Flex>
+
+                  <Flex justify='space-between' width='100%'>
+                    <Heading size='md' color='green.500'>
+                      Savings Goal:
+                    </Heading>
+                    <Text fontSize='md' fontWeight='bold' pt={2}>
+                      {`€${budget.savingsGoal}`}
+                    </Text>
+                  </Flex>
+                </VStack>
+              </Box>
+
+              <Box
+                borderWidth='1px'
+                borderRadius='lg'
+                padding={6}
+                width='100%'
+                mb={6}
+              >
+                <Heading size='lg' color='green.500' mb={8}>
+                  Savings
+                </Heading>
+                {hasOverspent() ? (
+                  <Box p={4} m={2} bg='orange.100' borderRadius='lg'>
+                    <Text fontSize='md' fontWeight='bold'>
+                      You've overspent by €{overspentAmount()}. Consider
+                      amending your budget.
+                    </Text>
+                  </Box>
+                ) : (
+                  <Box p={4} m={2} bg='green.100' borderRadius='lg'>
+                    <Text fontSize='md' fontWeight='bold'>
+                      You're on track! Spend less than €{remainingBudget()} to
+                      meet your savings goal.
                     </Text>
                   </Box>
                 )}
-              </Flex>
-
-              <VStack
-                divider={<StackDivider />}
-                spacing='4'
-                align='flex-start'
-                borderRadius='lg'
-                p={2}
-                m={2}
-              >
-                {recentTransactions &&
-                  recentTransactions.map(transaction => {
-                    return (
-                      <Flex
-                        key={transaction._id}
-                        justify='space-between'
-                        width='100%'
-                      >
-                        <Box w='30%'>
-                          <Heading size='sm' mb={2}>
-                            {transaction.vendor}
-                          </Heading>
-                          <Box
-                            p={2}
-                            bg='green.100'
-                            borderRadius='lg'
-                            w='fit-content'
-                          >
-                            <Text fontSize='sm'>{transaction.category}</Text>
-                          </Box>
-                        </Box>
-                        <Box w='30%'>
-                          <Text fontSize='md' fontWeight='bold' mb={2}>
-                            {`€${transaction.amount}`}
-                          </Text>
-                          <Text fontSize='sm'>{`on ${formatDate(
-                            transaction.date
-                          )}`}</Text>
-                        </Box>
-                        <Box w='10%'>
-                          <Button
-                            colorScheme='green'
-                            variant='ghost'
-                            onClick={() => handleEditTransaction(transaction)}
-                          >
-                            Edit
-                          </Button>
-                        </Box>
-                      </Flex>
-                    );
-                  })}
-              </VStack>
-            </Box>
-
-            <Box borderWidth='1px' borderRadius='lg' padding={6} width='50%'>
-              <Heading size='lg' color='green.500' mb={6}>
-                Spending Overview
-              </Heading>
-              <Flex mb={6} width='100%' justify='center' align='center'>
-                <SpendingPieChart transactions={transactions} />
-              </Flex>
-
-              <Heading size='lg' color='green.500' mb={6}>
-                Total spending
-              </Heading>
-
-              <Box p={4} m={2} mb={8} bg='green.100' borderRadius='lg'>
-                <Progress
-                  colorScheme='green'
-                  size='md'
-                  value={(totalSpent(transactions) / budget.totalIncome) * 100}
-                />
               </Box>
-              <VStack
-                divider={<StackDivider />}
-                spacing='4'
-                align='flex-start'
-                bg='green.50'
+
+              <Box
+                borderWidth='1px'
                 borderRadius='lg'
-                p={4}
-                m={2}
-                mb={8}
+                padding={6}
+                width='100%'
+                mb={6}
               >
-                <Flex justify='space-between' width='100%'>
-                  <Heading size='md' color='green.500'>
-                    Spent:
+                <Flex width='100%' justify='space-between' mb={4}>
+                  <Heading size='lg' color='green.500'>
+                    Transactions
                   </Heading>
-                  <Text fontSize='md' fontWeight='bold' pt={2}>
-                    {`€${totalSpent(transactions)}`}
-                  </Text>
+
+                  <ButtonGroup>
+                    <Link to={`/budgets/${budget._id}/transactions`}>
+                      <Button colorScheme='green' variant='solid'>
+                        View all
+                      </Button>
+                    </Link>
+                    <IconButton
+                      aria-label='Add Category'
+                      icon={<AddIcon />}
+                      colorScheme='green'
+                      variant='outline'
+                      onClick={onOpen}
+                    />
+                  </ButtonGroup>
                 </Flex>
 
-                <Flex justify='space-between' width='100%'>
-                  <Heading size='md' color='green.500'>
-                    Remaining Income:
-                  </Heading>
-                  <Text fontSize='md' fontWeight='bold' pt={2}>
-                    {`€${remainingBudget() + budget.savingsGoal}`}
-                  </Text>
+                <Flex w='100%' justify='center' align='center'>
+                  {recentTransactions.length === 0 && (
+                    <Box
+                      mt={6}
+                      p={2}
+                      bg='green.50'
+                      borderRadius='lg'
+                      w='fit-content'
+                    >
+                      <Text fontSize='sm' fontStyle='italic'>
+                        Your transactions will appear here.
+                      </Text>
+                    </Box>
+                  )}
                 </Flex>
-              </VStack>
 
-              <VStack width='100%' align='flex-start' spacing='4' mb={8}>
-                <Heading size='lg' color='green.500'>
-                  Spending by category
+                <VStack
+                  divider={<StackDivider />}
+                  spacing='4'
+                  align='flex-start'
+                  borderRadius='lg'
+                  p={2}
+                  m={2}
+                >
+                  {recentTransactions &&
+                    recentTransactions.map(transaction => {
+                      return (
+                        <Flex
+                          key={transaction._id}
+                          justify='space-between'
+                          width='100%'
+                        >
+                          <Box w='30%'>
+                            <Heading size='sm' mb={2}>
+                              {transaction.vendor}
+                            </Heading>
+                            <Box
+                              p={2}
+                              bg='green.100'
+                              borderRadius='lg'
+                              w='fit-content'
+                            >
+                              <Text fontSize='sm'>{transaction.category}</Text>
+                            </Box>
+                          </Box>
+                          <Box w='30%'>
+                            <Text fontSize='md' fontWeight='bold' mb={2}>
+                              {`€${transaction.amount}`}
+                            </Text>
+                            <Text fontSize='sm'>{`on ${formatDate(
+                              transaction.date
+                            )}`}</Text>
+                          </Box>
+                          <Box w='10%'>
+                            <Button
+                              colorScheme='green'
+                              variant='ghost'
+                              onClick={() => handleEditTransaction(transaction)}
+                            >
+                              Edit
+                            </Button>
+                          </Box>
+                        </Flex>
+                      );
+                    })}
+                </VStack>
+              </Box>
+            </Flex>
+
+            <Flex
+              justify='center'
+              direction='column'
+              align='flex-start'
+              w='50%'
+            >
+              <Box
+                borderWidth='1px'
+                borderRadius='lg'
+                padding={6}
+                width='100%'
+                mb={6}
+              >
+                <Heading size='lg' color='green.500' mb={6}>
+                  Spending Overview
                 </Heading>
-                <Flex width='100%' justify='space-between' wrap='wrap'>
-                  {budget.categoryAllocation.map(category => {
-                    return (
-                      <Flex
-                        key={category.name}
-                        width='30%'
-                        bg='green.50'
-                        borderRadius='lg'
-                        p={4}
-                        m={2}
-                        justify='space-between'
-                        alignItems='center'
-                      >
-                        <CircularProgress
-                          value={
-                            (totalSpent(transactionsByCategory(category.name)) /
-                              category.amount) *
-                            100
-                          }
-                          color='green.500'
-                          thickness='15px'
-                        />
 
-                        <Box>
-                          <Stat>
-                            <StatLabel>{category.name}</StatLabel>
-                            <StatNumber>{`€${
-                              category.amount -
-                              totalSpent(transactionsByCategory(category.name))
-                            }`}</StatNumber>
-                            <StatHelpText>{`remaining of €${category.amount}`}</StatHelpText>
-                          </Stat>
-                        </Box>
-                      </Flex>
-                    );
-                  })}
+                <Flex w='100%' justify='center' align='center'>
+                  {transactions.length === 0 && (
+                    <Box
+                      p={2}
+                      bg='green.50'
+                      borderRadius='lg'
+                      w='fit-content'
+                      mt={6}
+                      mb={8}
+                    >
+                      <Text fontSize='sm' fontStyle='italic'>
+                        An overview of your spending will appear here.
+                      </Text>
+                    </Box>
+                  )}
                 </Flex>
-              </VStack>
-            </Box>
+
+                {transactions.length > 0 && (
+                  <Flex width='100%' justify='center' align='center'>
+                    <SpendingPieChart transactions={transactions} />
+                  </Flex>
+                )}
+              </Box>
+
+              <Box
+                borderWidth='1px'
+                borderRadius='lg'
+                padding={6}
+                width='100%'
+                mb={6}
+              >
+                <Heading size='lg' color='green.500' mb={6}>
+                  Total spending
+                </Heading>
+
+                <Box p={4} m={2} mb={8} bg='green.100' borderRadius='lg'>
+                  <Progress
+                    colorScheme='green'
+                    size='md'
+                    value={
+                      (totalSpent(transactions) / budget.totalIncome) * 100
+                    }
+                  />
+                </Box>
+                <VStack
+                  divider={<StackDivider />}
+                  spacing='4'
+                  align='flex-start'
+                  bg='green.50'
+                  borderRadius='lg'
+                  p={4}
+                  m={2}
+                >
+                  <Flex justify='space-between' width='100%'>
+                    <Heading size='md' color='green.500'>
+                      Spent:
+                    </Heading>
+                    <Text fontSize='md' fontWeight='bold' pt={2}>
+                      {`€${totalSpent(transactions)}`}
+                    </Text>
+                  </Flex>
+
+                  <Flex justify='space-between' width='100%'>
+                    <Heading size='md' color='green.500'>
+                      Remaining Income:
+                    </Heading>
+                    <Text fontSize='md' fontWeight='bold' pt={2}>
+                      {`€${remainingBudget() + budget.savingsGoal}`}
+                    </Text>
+                  </Flex>
+                </VStack>
+              </Box>
+
+              <Box
+                borderWidth='1px'
+                borderRadius='lg'
+                padding={6}
+                width='100%'
+                mb={6}
+              >
+                <VStack width='100%' align='flex-start' spacing='4'>
+                  <Heading size='lg' color='green.500'>
+                    Budget by category
+                  </Heading>
+                  <Flex width='100%' justify='space-between' wrap='wrap'>
+                    {budget.categoryAllocation.map(category => {
+                      return (
+                        <Flex
+                          key={category.name}
+                          width='30%'
+                          bg='green.50'
+                          borderRadius='lg'
+                          p={4}
+                          m={2}
+                          justify='space-between'
+                          alignItems='center'
+                        >
+                          <CircularProgress
+                            value={
+                              (totalSpent(
+                                transactionsByCategory(category.name)
+                              ) /
+                                category.amount) *
+                              100
+                            }
+                            color='green.500'
+                            thickness='15px'
+                          />
+
+                          <Box>
+                            <Stat>
+                              <StatLabel>{category.name}</StatLabel>
+                              <StatNumber>{`€${
+                                category.amount -
+                                totalSpent(
+                                  transactionsByCategory(category.name)
+                                )
+                              }`}</StatNumber>
+                              <StatHelpText>{`remaining of €${category.amount}`}</StatHelpText>
+                            </Stat>
+                          </Box>
+                        </Flex>
+                      );
+                    })}
+                  </Flex>
+                </VStack>
+              </Box>
+            </Flex>
           </Flex>
 
           <Modal isOpen={isOpen} onClose={onClose} size='md'>
