@@ -27,7 +27,7 @@ function AddTransactionForm({
   onUpdateTransaction,
   selectedTransaction,
 }) {
-  const CURRENCY_API_KEY = `${import.meta.env.CURRENCY_API_KEY}`;
+  const CURRENCY_API_KEY = `${import.meta.env.VITE_CURRENCY_API_KEY}`;
 
   const [vendor, setVendor] = useState('');
   const [vendorError, setVendorError] = useState('');
@@ -146,7 +146,7 @@ function AddTransactionForm({
         // Extract conversion rate from the response based on the selected currency
         const conversionRate = response.data.data[currency];
 
-        // Multiply user's inputted amount by the conversion rate
+        // Divide user's inputted amount by the conversion rate
         convertedAmount = (amount / conversionRate).toFixed(2);
       } catch (error) {
         console.log(error);

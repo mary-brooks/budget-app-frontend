@@ -215,7 +215,7 @@ function SingleBudgetPage() {
                       Total Income:
                     </Heading>
                     <Text fontSize='md' fontWeight='bold' pt={2}>
-                      {`€${budget.totalIncome}`}
+                      {`€${budget.totalIncome.toFixed(2)}`}
                     </Text>
                   </Flex>
 
@@ -224,7 +224,7 @@ function SingleBudgetPage() {
                       Savings Goal:
                     </Heading>
                     <Text fontSize='md' fontWeight='bold' pt={2}>
-                      {`€${budget.savingsGoal}`}
+                      {`€${budget.savingsGoal.toFixed(2)}`}
                     </Text>
                   </Flex>
                 </VStack>
@@ -243,15 +243,15 @@ function SingleBudgetPage() {
                 {hasOverspent() ? (
                   <Box p={4} m={2} bg='orange.100' borderRadius='lg'>
                     <Text fontSize='md' fontWeight='bold'>
-                      You've overspent by €{overspentAmount()}. Consider
-                      amending your budget.
+                      You've overspent by €{overspentAmount().toFixed(2)}.
+                      Consider amending your budget.
                     </Text>
                   </Box>
                 ) : (
                   <Box p={4} m={2} bg='green.100' borderRadius='lg'>
                     <Text fontSize='md' fontWeight='bold'>
-                      You're on track! Spend less than €{remainingBudget()} to
-                      meet your savings goal.
+                      You're on track! Spend less than €
+                      {remainingBudget().toFixed(2)} to meet your savings goal.
                     </Text>
                   </Box>
                 )}
@@ -332,7 +332,7 @@ function SingleBudgetPage() {
                           </Box>
                           <Box w='30%'>
                             <Text fontSize='md' fontWeight='bold' mb={2}>
-                              {`€${transaction.amount}`}
+                              {`€${transaction.amount.toFixed(2)}`}
                             </Text>
                             <Text fontSize='sm'>{`on ${formatDate(
                               transaction.date
@@ -429,7 +429,7 @@ function SingleBudgetPage() {
                       Spent:
                     </Heading>
                     <Text fontSize='md' fontWeight='bold' pt={2}>
-                      {`€${totalSpent(transactions)}`}
+                      {`€${totalSpent(transactions).toFixed(2)}`}
                     </Text>
                   </Flex>
 
@@ -438,7 +438,9 @@ function SingleBudgetPage() {
                       Remaining Income:
                     </Heading>
                     <Text fontSize='md' fontWeight='bold' pt={2}>
-                      {`€${remainingBudget() + budget.savingsGoal}`}
+                      {`€${(remainingBudget() + budget.savingsGoal).toFixed(
+                        2
+                      )}`}
                     </Text>
                   </Flex>
                 </VStack>
@@ -483,12 +485,12 @@ function SingleBudgetPage() {
                           <Box>
                             <Stat>
                               <StatLabel>{category.name}</StatLabel>
-                              <StatNumber>{`€${
+                              <StatNumber>{`€${(
                                 category.amount -
                                 totalSpent(
                                   transactionsByCategory(category.name)
                                 )
-                              }`}</StatNumber>
+                              ).toFixed(2)}`}</StatNumber>
                               <StatHelpText>{`remaining of €${category.amount}`}</StatHelpText>
                             </Stat>
                           </Box>
