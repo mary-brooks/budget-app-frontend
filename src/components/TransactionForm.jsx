@@ -35,6 +35,8 @@ function AddTransactionForm({
   const [amount, setAmount] = useState('');
   const [amountError, setAmountError] = useState('');
 
+  const [convertedAmount, setConvertedAmount] = useState('');
+
   const [date, setDate] = useState('');
   const [dateError, setDateError] = useState('');
 
@@ -92,8 +94,29 @@ function AddTransactionForm({
       setAmount(selectedTransaction.amount || '');
       setDate(formatDate(selectedTransaction.date) || '');
       setCategory(selectedTransaction.category || '');
+
+      if (selectedTransaction.currency !== 'EUR') {
+        setIsTransactionAbroad(true);
+        setCurrency(selectedTransaction.currency);
+      } else {
+        setIsTransactionAbroad(false);
+      }
     }
   }, [selectedTransaction]);
+
+  // Handle changes related to amount, currency, and transaction type
+  useEffect(() => {
+    if (isTransactionAbroad) {
+      getConversion();
+    } else {
+      setConvertedAmount(amount);
+    }
+  }, [amount, currency, isTransactionAbroad]);
+
+  // Log changes in isTransactionAbroad
+  useEffect(() => {
+    console.log('isTransactionAbroad:', isTransactionAbroad);
+  }, [isTransactionAbroad]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -128,33 +151,10 @@ function AddTransactionForm({
     setCategoryError('');
     setAmountError('');
 
-    let convertedAmount = amount;
-
-    if (isTransactionAbroad) {
-      try {
-        const response = await axios.get(
-          'https://api.freecurrencyapi.com/v1/latest',
-          {
-            params: {
-              apikey: CURRENCY_API_KEY,
-              base_currency: 'EUR',
-              currencies: currency,
-            },
-          }
-        );
-
-        // Extract conversion rate from the response based on the selected currency
-        const conversionRate = response.data.data[currency];
-
-        // Divide user's inputted amount by the conversion rate
-        convertedAmount = (amount / conversionRate).toFixed(2);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
     const requestBody = {
-      amount: convertedAmount,
+      amount,
+      convertedAmount,
+      currency,
       vendor,
       category,
       date,
@@ -185,6 +185,30 @@ function AddTransactionForm({
     } catch (error) {
       console.log('Error deleting transaction', error);
       setError(error.message);
+    }
+  };
+
+  const getConversion = async () => {
+    try {
+      const response = await axios.get(
+        'https://api.freecurrencyapi.com/v1/latest',
+        {
+          params: {
+            apikey: CURRENCY_API_KEY,
+            base_currency: 'EUR',
+            currencies: currency,
+          },
+        }
+      );
+
+      // Extract conversion rate from the response based on the selected currency
+      const conversionRate = response.data.data[currency];
+
+      // Divide user's inputted amount by the conversion rate and update the state
+      const convertedAmountValue = (amount / conversionRate).toFixed(2);
+      setConvertedAmount(convertedAmountValue);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -245,35 +269,48 @@ function AddTransactionForm({
             <FormErrorMessage>{amountError}</FormErrorMessage>
           </FormControl>
 
-          <FormControl>
-            <Checkbox
-              colorScheme='green'
-              checked={isTransactionAbroad}
-              onChange={() => setIsTransactionAbroad(!isTransactionAbroad)}
-            >
-              Transaction abroad
-            </Checkbox>
-          </FormControl>
+          {!selectedTransaction && (
+            <FormControl>
+              <Checkbox
+                colorScheme='green'
+                checked={isTransactionAbroad}
+                onChange={() => setIsTransactionAbroad(!isTransactionAbroad)}
+              >
+                Transaction abroad
+              </Checkbox>
+            </FormControl>
+          )}
 
           {isTransactionAbroad && (
-            <FormControl>
-              <FormLabel>Currency:</FormLabel>
-              <Select
-                placeholder='Select Currency'
-                value={currency}
-                onChange={e => setCurrency(e.target.value)}
-              >
-                <option>GBP</option>
-                <option>CHF</option>
-                <option>USD</option>
-                <option>CAD</option>
-                <option>AUD</option>
-                <option>NZD</option>
-                <option>JYP</option>
-                <option>HKD</option>
-                <option>CNH</option>
-              </Select>
-            </FormControl>
+            <>
+              <FormControl>
+                <FormLabel>Currency:</FormLabel>
+                <Select
+                  placeholder='EUR'
+                  value={currency}
+                  onChange={e => setCurrency(e.target.value)}
+                >
+                  <option>GBP</option>
+                  <option>CHF</option>
+                  <option>USD</option>
+                  <option>CAD</option>
+                  <option>AUD</option>
+                  <option>NZD</option>
+                  <option>JYP</option>
+                  <option>HKD</option>
+                </Select>
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Amount in Euros:</FormLabel>
+                <Input
+                  type='number'
+                  placeholder='0'
+                  value={convertedAmount}
+                  readOnly
+                />
+              </FormControl>
+            </>
           )}
 
           {selectedTransaction && (

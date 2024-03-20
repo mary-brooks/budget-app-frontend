@@ -68,7 +68,7 @@ function SingleBudgetPage() {
     if (!budget || !transactions) return 0;
 
     return allTransactions.reduce(
-      (acc, transaction) => acc + transaction.amount,
+      (acc, transaction) => acc + transaction.convertedAmount,
       0
     );
   };
@@ -172,7 +172,7 @@ function SingleBudgetPage() {
               justify='center'
               direction='column'
               align='flex-start'
-              w='40%'
+              w='42%'
             >
               <Box
                 borderWidth='1px'
@@ -332,7 +332,7 @@ function SingleBudgetPage() {
                           </Box>
                           <Box w='30%'>
                             <Text fontSize='md' fontWeight='bold' mb={2}>
-                              {`€${transaction.amount.toFixed(2)}`}
+                              {`€${transaction.convertedAmount.toFixed(2)}`}
                             </Text>
                             <Text fontSize='sm'>{`on ${formatDate(
                               transaction.date

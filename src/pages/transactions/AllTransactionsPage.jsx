@@ -148,7 +148,7 @@ function AllTransactionsPage() {
                   </Box>
                   <Box w='30%'>
                     <Text fontSize='md' fontWeight='bold' mb={2}>
-                      {`€${transaction.amount}`}
+                      {`€${transaction.convertedAmount}`}
                     </Text>
                     <Text fontSize='sm'>{`on ${formatDate(
                       transaction.date
