@@ -87,7 +87,7 @@ function AllTransactionsPage() {
 
   return (
     <>
-      <Heading size='2xl' color='green.500' textAlign='center' m={4}>
+      <Heading size='2xl' color='green.700' textAlign='center' m={4}>
         All Transactions
       </Heading>
 
@@ -142,7 +142,7 @@ function AllTransactionsPage() {
                     <Heading size='sm' mb={2}>
                       {transaction.vendor}
                     </Heading>
-                    <Box p={2} bg='green.50' borderRadius='lg' w='fit-content'>
+                    <Box p={2} bg='green.100' borderRadius='lg' w='fit-content'>
                       <Text fontSize='sm'>{transaction.category}</Text>
                     </Box>
                   </Box>
@@ -177,7 +177,12 @@ function AllTransactionsPage() {
       <Modal isOpen={isOpen} onClose={onClose} size='md'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add Transaction</ModalHeader>
+          {!selectedTransaction && (
+            <ModalHeader color='blackAlpha800'>Add Transaction</ModalHeader>
+          )}
+          {selectedTransaction && (
+            <ModalHeader color='blackAlpha800'>Edit Transaction</ModalHeader>
+          )}
           <ModalCloseButton />
           <ModalBody>
             {

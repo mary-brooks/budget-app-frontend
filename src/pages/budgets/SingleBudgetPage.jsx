@@ -157,7 +157,13 @@ function SingleBudgetPage() {
     <>
       {budget && (
         <>
-          <Heading size='2xl' color='green.500' textAlign='center' m={4}>
+          <Heading
+            size='2xl'
+            textAlign='center'
+            mt={6}
+            mb={4}
+            color='green.800'
+          >
             {budget.name}
           </Heading>
 
@@ -182,7 +188,7 @@ function SingleBudgetPage() {
                 mb={6}
               >
                 <Flex width='100%' justify='space-between' mb={8}>
-                  <Heading size='lg' color='green.500'>
+                  <Heading size='lg' color='green.700'>
                     Budget Overview
                   </Heading>
                   <Link to={`/budgets/update/${budget._id}`}>
@@ -237,7 +243,7 @@ function SingleBudgetPage() {
                 width='100%'
                 mb={6}
               >
-                <Heading size='lg' color='green.500' mb={8}>
+                <Heading size='lg' color='green.700' mb={8}>
                   Savings
                 </Heading>
                 {hasOverspent() ? (
@@ -265,7 +271,7 @@ function SingleBudgetPage() {
                 mb={6}
               >
                 <Flex width='100%' justify='space-between' mb={4}>
-                  <Heading size='lg' color='green.500'>
+                  <Heading size='lg' color='green.700'>
                     Transactions
                   </Heading>
 
@@ -367,7 +373,7 @@ function SingleBudgetPage() {
                 width='100%'
                 mb={6}
               >
-                <Heading size='lg' color='green.500' mb={6}>
+                <Heading size='lg' color='green.700' mb={6}>
                   Spending Overview
                 </Heading>
 
@@ -402,7 +408,7 @@ function SingleBudgetPage() {
                 width='100%'
                 mb={6}
               >
-                <Heading size='lg' color='green.500' mb={6}>
+                <Heading size='lg' color='green.700' mb={6}>
                   Total spending
                 </Heading>
 
@@ -454,7 +460,7 @@ function SingleBudgetPage() {
                 mb={6}
               >
                 <VStack width='100%' align='flex-start' spacing='4'>
-                  <Heading size='lg' color='green.500'>
+                  <Heading size='lg' color='green.700'>
                     Budget by category
                   </Heading>
                   <Flex width='100%' justify='space-between' wrap='wrap'>
@@ -485,7 +491,7 @@ function SingleBudgetPage() {
                           <Box>
                             <Stat>
                               <StatLabel>{category.name}</StatLabel>
-                              <StatNumber>{`€${(
+                              <StatNumber color='blackAlpha800'>{`€${(
                                 category.amount -
                                 totalSpent(
                                   transactionsByCategory(category.name)
@@ -506,7 +512,14 @@ function SingleBudgetPage() {
           <Modal isOpen={isOpen} onClose={onClose} size='md'>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Add Transaction</ModalHeader>
+              {!selectedTransaction && (
+                <ModalHeader color='blackAlpha800'>Add Transaction</ModalHeader>
+              )}
+              {selectedTransaction && (
+                <ModalHeader color='blackAlpha800'>
+                  Edit Transaction
+                </ModalHeader>
+              )}
               <ModalCloseButton />
               <ModalBody>
                 {

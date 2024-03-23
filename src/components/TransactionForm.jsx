@@ -22,7 +22,7 @@ import {
   Checkbox,
 } from '@chakra-ui/react';
 
-function AddTransactionForm({
+function TransactionForm({
   budgetId,
   onUpdateTransaction,
   selectedTransaction,
@@ -413,4 +413,4 @@ function AddTransactionForm({
   );
 }
 
-export default AddTransactionForm;
+export default TransactionForm;

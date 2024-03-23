@@ -47,7 +47,7 @@ function AllBudgetsPage() {
   return (
     <VStack spacing='4'>
       {user && (
-        <Heading size='2xl' m={4}>
+        <Heading size='2xl' mt={6} mb={4} color='green.800'>
           {user.name}'s Budgets
         </Heading>
       )}
@@ -64,7 +64,7 @@ function AllBudgetsPage() {
                 minW='20rem'
               >
                 <CardHeader>
-                  <Heading size='lg' color='green.500'>
+                  <Heading size='lg' color='green.700'>
                     {budget.name}
                   </Heading>
                 </CardHeader>

@@ -17,7 +17,7 @@ function Navbar() {
         borderRadius='lg'
         m={2}
       >
-        <Heading size='md'>Budgeting App</Heading>
+        <Heading size='md'>Budget Buddy</Heading>
 
         {/* Desktop Menu - Buttons */}
         <ButtonGroup display={{ base: 'none', md: 'block' }}>
