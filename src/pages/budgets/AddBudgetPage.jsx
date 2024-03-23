@@ -70,6 +70,8 @@ function AddBudgetPage() {
   const handleStartDateBlur = () => {
     if (!startDate) {
       setStartDateError('Start date is required');
+    } else if (endDate && new Date(startDate) > new Date(endDate)) {
+      setStartDateError('Start date cannot be after the end date');
     } else {
       setStartDateError('');
     }
@@ -78,6 +80,8 @@ function AddBudgetPage() {
   const handleEndDateBlur = () => {
     if (!endDate) {
       setEndDateError('End date is required');
+    } else if (startDate && new Date(endDate) < new Date(startDate)) {
+      setEndDateError('End date cannot be before the start date');
     } else {
       setEndDateError('');
     }
@@ -117,6 +121,12 @@ function AddBudgetPage() {
     // Check for empty end date
     if (!endDate) {
       setEndDateError('End date is required');
+      return;
+    }
+
+    // Check if start date is after end date
+    if (new Date(startDate) > new Date(endDate)) {
+      setStartDateError('Start date cannot be after the end date');
       return;
     }
 
