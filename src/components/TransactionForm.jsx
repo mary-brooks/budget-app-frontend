@@ -69,7 +69,15 @@ function AddTransactionForm({
     if (!date) {
       setDateError('Date is required');
     } else {
-      setDateError('');
+      const selectedDate = new Date(date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
+
+      if (selectedDate > today) {
+        setDateError('Selected date cannot be in the future');
+      } else {
+        setDateError('');
+      }
     }
   };
 
@@ -128,8 +136,8 @@ function AddTransactionForm({
     }
 
     // Check for empty date
-    if (!date) {
-      setDateError('Date is required');
+    if (!date || dateError) {
+      setDateError('Valid date is required');
       return;
     }
 
