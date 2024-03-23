@@ -111,7 +111,7 @@ function AddTransactionForm({
     } else {
       setConvertedAmount(amount);
     }
-  }, [amount, currency, isTransactionAbroad]);
+  }, [amount, currency, isTransactionAbroad, date]);
 
   // Log changes in isTransactionAbroad
   useEffect(() => {
@@ -190,23 +190,51 @@ function AddTransactionForm({
 
   const getConversion = async () => {
     try {
-      const response = await axios.get(
-        'https://api.freecurrencyapi.com/v1/latest',
-        {
-          params: {
-            apikey: CURRENCY_API_KEY,
-            base_currency: 'EUR',
-            currencies: currency,
-          },
-        }
-      );
+      const currentDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
+      // Check if the selected date is today's date
+      const isToday = date === currentDate;
+
+      let endpoint = '';
+
+      if (isToday) {
+        endpoint = 'https://api.freecurrencyapi.com/v1/latest'; // Endpoint for today's date
+      } else {
+        endpoint = 'https://api.freecurrencyapi.com/v1/historical'; // Endpoint for other dates
+      }
+
+      const params = {
+        apikey: CURRENCY_API_KEY,
+        base_currency: 'EUR',
+        currencies: currency,
+      };
+
+      // If historical, add date parameter
+      if (!isToday) {
+        params.date = date;
+      }
+
+      const response = await axios.get(endpoint, {
+        params: params,
+      });
 
       // Extract conversion rate from the response based on the selected currency
-      const conversionRate = response.data.data[currency];
+      let conversionRate;
 
-      // Divide user's inputted amount by the conversion rate and update the state
-      const convertedAmountValue = (amount / conversionRate).toFixed(2);
-      setConvertedAmount(convertedAmountValue);
+      if (isToday) {
+        conversionRate = response.data.data[currency];
+      } else {
+        conversionRate =
+          response.data.data[date] && response.data.data[date][currency];
+      }
+
+      if (typeof conversionRate !== 'undefined') {
+        // Divide user's inputted amount by the conversion rate and update the state
+        const convertedAmountValue = (amount / conversionRate).toFixed(2);
+        setConvertedAmount(convertedAmountValue);
+      } else {
+        console.log('Conversion rate not available');
+      }
     } catch (error) {
       console.log(error);
     }
@@ -232,7 +260,7 @@ function AddTransactionForm({
             <Input
               type='date'
               value={date}
-              onChange={e => setDate(e.target.value)}
+              onChange={e => setDate(formatDate(e.target.value))}
               onBlur={handleDateBlur}
             />
             <FormErrorMessage>{dateError}</FormErrorMessage>
