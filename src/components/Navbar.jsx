@@ -1,4 +1,4 @@
-import { Flex, ButtonGroup, Button, Heading } from '@chakra-ui/react';
+import { Flex, ButtonGroup, Button, Heading, Box } from '@chakra-ui/react';
 
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/auth.context';
@@ -12,12 +12,16 @@ function Navbar() {
       <Flex
         align='center'
         justify='space-between'
-        padding={4}
+        padding={3}
         borderWidth='1px'
         borderRadius='lg'
         m={2}
       >
-        <Heading size='md'>Budget Buddy</Heading>
+        <Link to='/'>
+          <Box p={4} bg='green.100' borderRadius='full' w='fit-content'>
+            <Heading size='md'>Budget Buddy</Heading>
+          </Box>
+        </Link>
 
         {/* Desktop Menu - Buttons */}
         <ButtonGroup display={{ base: 'none', md: 'block' }}>
