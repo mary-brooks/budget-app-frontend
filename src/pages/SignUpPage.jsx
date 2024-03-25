@@ -99,7 +99,7 @@ function Signup() {
         borderWidth='1px'
         borderRadius='lg'
       >
-        <Heading size='lg' textAlign='center' mb={2}>
+        <Heading size='lg' color='green.700' textAlign='center' mb={2}>
           Sign up
         </Heading>
 
