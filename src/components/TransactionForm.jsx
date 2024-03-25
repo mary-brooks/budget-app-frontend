@@ -89,6 +89,7 @@ function TransactionForm({
     }
   };
 
+  // Helper function to format the date to ISO format without time component (YYYY-MM-DD)
   const formatDate = dateString => {
     const dateObject = new Date(dateString);
     const formattedDate = dateObject.toISOString().split('T')[0];

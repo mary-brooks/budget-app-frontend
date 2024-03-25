@@ -13,7 +13,6 @@ import {
   Heading,
   StackDivider,
   Text,
-  IconButton,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -21,6 +20,7 @@ import {
   ModalCloseButton,
   ModalBody,
   Input,
+  Center,
 } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
@@ -30,7 +30,11 @@ function AllTransactionsPage() {
 
   const [transactions, setTransactions] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
-  const [searchText, setSearchText] = useState('');
+
+  const [searchVendor, setSearchVendor] = useState('');
+  const [searchCategory, setSearchCategory] = useState('');
+  const [searchDate, setSearchDate] = useState('');
+  const [searchAmount, setSearchAmount] = useState('');
 
   // State and logic for Add Transaction modal
   const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +48,7 @@ function AllTransactionsPage() {
     setIsOpen(true);
   };
 
-  // Helper function to format the date
+  // Helper function to format the date (DD/MM/YYYY)
   const formatDate = dateString => {
     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -71,13 +75,24 @@ function AllTransactionsPage() {
     onOpen();
   };
 
-  const handleSearchChange = e => {
-    const text = e.target.value;
-    setSearchText(text);
+  const handleVendorChange = e => {
+    setSearchVendor(e.target.value);
+  };
+
+  const handleCategoryChange = e => {
+    setSearchCategory(e.target.value);
   };
 
   const filteredTransactions = transactions.filter(transaction => {
-    return transaction.vendor.toLowerCase().includes(searchText.toLowerCase());
+    const vendorMatch =
+      !searchVendor ||
+      transaction.vendor.toLowerCase().includes(searchVendor.toLowerCase());
+
+    const categoryMatch =
+      !searchCategory ||
+      transaction.category.toLowerCase().includes(searchCategory.toLowerCase());
+
+    return vendorMatch && categoryMatch;
   });
 
   const getTransactions = async () => {
@@ -98,7 +113,7 @@ function AllTransactionsPage() {
 
   return (
     <>
-      <Heading size='2xl' color='green.700' textAlign='center' m={4}>
+      <Heading size='2xl' color='green.900' textAlign='center' mt={4} mb={8}>
         All Transactions
       </Heading>
 
@@ -111,94 +126,125 @@ function AllTransactionsPage() {
         width='100%'
         gap={2}
       >
-        <Flex width='40%' justify='space-between'>
-          <Input
-            type='text'
-            placeholder='Search...'
-            onChange={handleSearchChange}
-            mr={2}
-          />
-          <IconButton
-            aria-label='Add Transaction'
-            icon={<AddIcon />}
-            colorScheme='green'
-            variant='outline'
-            onClick={onOpen}
-          />
-        </Flex>
+        <Box borderWidth='1px' borderRadius='lg' padding={6} width='60%' mb={6}>
+          <Heading size='md' color='green.700' mb={6}>
+            Search Transactions
+          </Heading>
+          <Flex width='100%' justify='space-between' bg='green.50' p={4}>
+            <Box w='30%'>
+              <Text fontSize='md' fontWeight='bold' mb={2}>
+                By vendor:
+              </Text>
+              <Input
+                type='text'
+                placeholder='Search...'
+                onChange={handleVendorChange}
+              />
+            </Box>
+            <Box w='30%'>
+              <Text fontSize='md' fontWeight='bold' mb={2}>
+                By category:
+              </Text>
+              <Input
+                type='text'
+                placeholder='Search...'
+                onChange={handleCategoryChange}
+              />
+            </Box>
 
-        <Flex></Flex>
-        <VStack
-          borderWidth='1px'
-          borderRadius='lg'
-          divider={<StackDivider />}
-          spacing='4'
-          width='40%'
-          p={6}
-          m={2}
-        >
-          {transactions.length === 0 && (
-            <Flex w='100%' justify='center' align='center'>
-              <Box p={2} bg='green.50' borderRadius='lg' w='fit-content'>
-                <Text fontSize='sm' fontStyle='italic'>
-                  Your transactions will appear here.
-                </Text>
-              </Box>
-            </Flex>
-          )}
+            <Box w='20%'>
+              <Text fontSize='md' fontWeight='bold' mb={2}>
+                By date:
+              </Text>
+              <Input type='date' />
+            </Box>
 
-          {transactions &&
-            filteredTransactions.map(transaction => {
-              return (
-                <Flex
-                  key={transaction._id}
-                  justify='space-between'
-                  width='100%'
-                >
-                  <Box w='30%'>
-                    <Heading size='sm' mb={2}>
-                      {transaction.vendor}
-                    </Heading>
-                    <Box p={2} bg='green.100' borderRadius='lg' w='fit-content'>
-                      <Text fontSize='sm'>{transaction.category}</Text>
+            <Box w='15%'>
+              <Text fontSize='md' fontWeight='bold' mb={2}>
+                By amount:
+              </Text>
+              <Input type='number' placeholder='0.00' />
+            </Box>
+          </Flex>
+        </Box>
+
+        <Box borderWidth='1px' borderRadius='lg' width='50%' p={6} mb={4}>
+          <Flex justify='flex-end'>
+            <Button colorScheme='green' variant='outline' mb={6}>
+              Add Transaction
+            </Button>
+          </Flex>
+          <VStack divider={<StackDivider />} spacing='4' mb={6} p={2}>
+            {transactions.length === 0 && (
+              <Flex w='100%' justify='center' align='center'>
+                <Box p={2} bg='green.50' borderRadius='lg' w='fit-content'>
+                  <Text fontSize='sm' fontStyle='italic'>
+                    Your transactions will appear here.
+                  </Text>
+                </Box>
+              </Flex>
+            )}
+
+            {transactions &&
+              filteredTransactions.map(transaction => {
+                return (
+                  <Flex
+                    key={transaction._id}
+                    justify='space-between'
+                    width='100%'
+                  >
+                    <Box w='30%'>
+                      <Heading size='sm' mb={2}>
+                        {transaction.vendor}
+                      </Heading>
+                      <Box
+                        p={2}
+                        bg='green.100'
+                        borderRadius='lg'
+                        w='fit-content'
+                      >
+                        <Text fontSize='sm'>{transaction.category}</Text>
+                      </Box>
                     </Box>
-                  </Box>
-                  <Box w='30%'>
-                    <Text fontSize='md' fontWeight='bold' mb={2}>
-                      {`€${transaction.convertedAmount}`}
-                    </Text>
-                    <Text fontSize='sm'>{`on ${formatDate(
-                      transaction.date
-                    )}`}</Text>
-                  </Box>
-                  <Box w='10%'>
-                    <Button
-                      colorScheme='green'
-                      variant='ghost'
-                      onClick={() => handleEditTransaction(transaction)}
-                    >
-                      Edit
-                    </Button>
-                  </Box>
-                </Flex>
-              );
-            })}
-        </VStack>
-        <Link to={`/budgets/${budgetId}`}>
-          <Button colorScheme='green' variant='solid' mb={6}>
-            Back to budget
-          </Button>
-        </Link>
+                    <Box w='30%'>
+                      <Text fontSize='md' fontWeight='bold' mb={2}>
+                        {`€${transaction.convertedAmount}`}
+                      </Text>
+                      <Text fontSize='sm'>{`on ${formatDate(
+                        transaction.date
+                      )}`}</Text>
+                    </Box>
+                    <Box w='10%'>
+                      <Button
+                        colorScheme='green'
+                        variant='ghost'
+                        onClick={() => handleEditTransaction(transaction)}
+                      >
+                        Edit
+                      </Button>
+                    </Box>
+                  </Flex>
+                );
+              })}
+          </VStack>
+          <Center>
+            <Link to={`/budgets/${budgetId}`}>
+              <Button colorScheme='green' variant='solid'>
+                Back to budget
+              </Button>
+            </Link>
+          </Center>
+        </Box>
       </Flex>
 
       <Modal isOpen={isOpen} onClose={onClose} size='md'>
         <ModalOverlay />
         <ModalContent>
           {!selectedTransaction && (
-            <ModalHeader color='blackAlpha800'>Add Transaction</ModalHeader>
+            <ModalHeader color='green.700'>Add Transaction</ModalHeader>
           )}
           {selectedTransaction && (
-            <ModalHeader color='blackAlpha800'>Edit Transaction</ModalHeader>
+            <ModalHeader color='green.700'>Edit Transaction</ModalHeader>
           )}
           <ModalCloseButton />
           <ModalBody>
