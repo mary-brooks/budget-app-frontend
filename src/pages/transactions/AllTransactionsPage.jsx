@@ -20,6 +20,7 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
+  Input,
 } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
@@ -29,12 +30,7 @@ function AllTransactionsPage() {
 
   const [transactions, setTransactions] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
-
-  // Helper function to format the date
-  const formatDate = dateString => {
-    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+  const [searchText, setSearchText] = useState('');
 
   // State and logic for Add Transaction modal
   const [isOpen, setIsOpen] = useState(false);
@@ -46,6 +42,12 @@ function AllTransactionsPage() {
 
   const onOpen = () => {
     setIsOpen(true);
+  };
+
+  // Helper function to format the date
+  const formatDate = dateString => {
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   // handler function for adding or updating a transaction
@@ -68,6 +70,15 @@ function AllTransactionsPage() {
     setSelectedTransaction(transaction);
     onOpen();
   };
+
+  const handleSearchChange = e => {
+    const text = e.target.value;
+    setSearchText(text);
+  };
+
+  const filteredTransactions = transactions.filter(transaction => {
+    return transaction.vendor.toLowerCase().includes(searchText.toLowerCase());
+  });
 
   const getTransactions = async () => {
     try {
@@ -100,9 +111,15 @@ function AllTransactionsPage() {
         width='100%'
         gap={2}
       >
-        <Flex width='40%' justify='flex-end'>
+        <Flex width='40%' justify='space-between'>
+          <Input
+            type='text'
+            placeholder='Search...'
+            onChange={handleSearchChange}
+            mr={2}
+          />
           <IconButton
-            aria-label='Add Category'
+            aria-label='Add Transaction'
             icon={<AddIcon />}
             colorScheme='green'
             variant='outline'
@@ -131,7 +148,7 @@ function AllTransactionsPage() {
           )}
 
           {transactions &&
-            transactions.map(transaction => {
+            filteredTransactions.map(transaction => {
               return (
                 <Flex
                   key={transaction._id}
