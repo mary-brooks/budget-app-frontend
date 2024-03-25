@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { addBudget } from '../../api/budgets.api';
 
 import {
@@ -15,6 +15,7 @@ import {
   Button,
   IconButton,
   Text,
+  ButtonGroup,
 } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
@@ -178,7 +179,7 @@ function AddBudgetPage() {
         borderWidth='1px'
         borderRadius='lg'
       >
-        <Heading size='lg' textAlign='center' mb={2}>
+        <Heading color='green.700' size='lg' textAlign='center' mb={2}>
           Add Budget
         </Heading>
 
@@ -286,10 +287,16 @@ function AddBudgetPage() {
                 </Flex>
               ))}
             </FormControl>
-
-            <Button type='submit' colorScheme='green' variant='solid'>
-              Add Budget
-            </Button>
+            <ButtonGroup>
+              <Button type='submit' colorScheme='green' variant='solid'>
+                Add Budget
+              </Button>
+              <Link to='/budgets'>
+                <Button colorScheme='green' variant='outline'>
+                  Return to Budgets
+                </Button>
+              </Link>
+            </ButtonGroup>
 
             {error && <Text color='red.500'>{error}</Text>}
           </VStack>
