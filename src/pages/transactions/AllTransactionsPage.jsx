@@ -20,10 +20,12 @@ import {
   ModalCloseButton,
   ModalBody,
   Input,
+  InputGroup,
+  InputLeftElement,
   Center,
 } from '@chakra-ui/react';
 
-import { AddIcon } from '@chakra-ui/icons';
+import { FaEuroSign } from 'react-icons/fa';
 
 function AllTransactionsPage() {
   const { budgetId } = useParams();
@@ -54,6 +56,13 @@ function AllTransactionsPage() {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  // Helper function to format the date to ISO format without time component (YYYY-MM-DD)
+  const formatDateForDB = dateString => {
+    const dateObject = new Date(dateString);
+    const formattedDate = dateObject.toISOString().split('T')[0];
+    return formattedDate;
+  };
+
   // handler function for adding or updating a transaction
   const handleUpdateTransaction = async () => {
     try {
@@ -75,14 +84,6 @@ function AllTransactionsPage() {
     onOpen();
   };
 
-  const handleVendorChange = e => {
-    setSearchVendor(e.target.value);
-  };
-
-  const handleCategoryChange = e => {
-    setSearchCategory(e.target.value);
-  };
-
   const filteredTransactions = transactions.filter(transaction => {
     const vendorMatch =
       !searchVendor ||
@@ -92,7 +93,14 @@ function AllTransactionsPage() {
       !searchCategory ||
       transaction.category.toLowerCase().includes(searchCategory.toLowerCase());
 
-    return vendorMatch && categoryMatch;
+    const dateMatch =
+      !searchDate || transaction.date.includes(formatDateForDB(searchDate));
+
+    const amountMatch =
+      !searchAmount ||
+      transaction.convertedAmount.toString().includes(searchAmount);
+
+    return vendorMatch && categoryMatch && dateMatch && amountMatch;
   });
 
   const getTransactions = async () => {
@@ -138,7 +146,7 @@ function AllTransactionsPage() {
               <Input
                 type='text'
                 placeholder='Search...'
-                onChange={handleVendorChange}
+                onChange={e => setSearchVendor(e.target.value)}
               />
             </Box>
             <Box w='30%'>
@@ -148,7 +156,7 @@ function AllTransactionsPage() {
               <Input
                 type='text'
                 placeholder='Search...'
-                onChange={handleCategoryChange}
+                onChange={e => setSearchCategory(e.target.value)}
               />
             </Box>
 
@@ -156,14 +164,26 @@ function AllTransactionsPage() {
               <Text fontSize='md' fontWeight='bold' mb={2}>
                 By date:
               </Text>
-              <Input type='date' />
+              <Input
+                type='date'
+                onChange={e => setSearchDate(e.target.value)}
+              />
             </Box>
 
             <Box w='15%'>
               <Text fontSize='md' fontWeight='bold' mb={2}>
                 By amount:
               </Text>
-              <Input type='number' placeholder='0.00' />
+              <InputGroup>
+                <InputLeftElement pointerEvents='none'>
+                  <FaEuroSign />
+                </InputLeftElement>
+                <Input
+                  type='number'
+                  placeholder='0.00'
+                  onChange={e => setSearchAmount(e.target.value)}
+                />
+              </InputGroup>
             </Box>
           </Flex>
         </Box>
