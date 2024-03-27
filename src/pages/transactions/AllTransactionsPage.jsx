@@ -246,6 +246,16 @@ function AllTransactionsPage() {
                   </Flex>
                 );
               })}
+
+            {transactions && filteredTransactions.length === 0 && (
+              <Flex w='100%' justify='center' align='center'>
+                <Box p={2} bg='green.50' borderRadius='lg' w='fit-content'>
+                  <Text fontSize='sm' fontStyle='italic'>
+                    No transactions match the search criteria.
+                  </Text>
+                </Box>
+              </Flex>
+            )}
           </VStack>
           <Center>
             <Link to={`/budgets/${budgetId}`}>
