@@ -18,8 +18,13 @@ function Navbar() {
       h='fit-content'
     >
       <Link to='/'>
-        <Box p={4} bg='green.100' borderRadius='full' w='fit-content'>
-          <Heading size='md'>Budget Buddy</Heading>
+        <Box
+          p={{ base: 2, md: 4 }}
+          bg='green.100'
+          borderRadius='full'
+          w='fit-content'
+        >
+          <Heading size={{ base: 'xs', md: 'md' }}>Budget Buddy</Heading>
         </Box>
       </Link>
 
@@ -27,12 +32,20 @@ function Navbar() {
         {!isLoggedIn && (
           <>
             <Link to='/login'>
-              <Button colorScheme='green' variant='solid'>
+              <Button
+                colorScheme='green'
+                variant='solid'
+                size={{ base: 'xs', sm: 'sm', md: 'md' }}
+              >
                 Login
               </Button>
             </Link>
             <Link to='/signup'>
-              <Button colorScheme='green' variant='outline'>
+              <Button
+                colorScheme='green'
+                variant='outline'
+                size={{ base: 'xs', sm: 'sm', md: 'md' }}
+              >
                 Sign up
               </Button>
             </Link>
@@ -42,7 +55,11 @@ function Navbar() {
         {isLoggedIn && (
           <>
             <Link to='/budgets'>
-              <Button colorScheme='green' variant='solid'>
+              <Button
+                colorScheme='green'
+                variant='solid'
+                size={{ base: 'xs', sm: 'sm', md: 'md' }}
+              >
                 Budgets
               </Button>
             </Link>
@@ -52,6 +69,7 @@ function Navbar() {
                 colorScheme='green'
                 variant='outline'
                 onClick={logOutUser}
+                size={{ base: 'xs', sm: 'sm', md: 'md' }}
               >
                 Log out
               </Button>

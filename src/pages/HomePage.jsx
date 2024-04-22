@@ -19,48 +19,76 @@ function HomePage() {
 
   return (
     <>
-      <Box h='85vh'>
+      <Box h='fit-content'>
         <Flex
-          w='99%'
-          h='90%'
           m={2}
           align='center'
           justify='center'
           borderWidth='1px'
           borderRadius='lg'
         >
-          <Flex justify='space-between' gap={2}>
-            <Flex justify='center' align='center' w='35%' p={4} ml={6}>
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            justify={{ md: 'space-between' }}
+            align={{ base: 'center' }}
+            gap={2}
+          >
+            <Flex
+              justify='center'
+              align='center'
+              w={{ base: '80%', sm: '60%', md: '35%' }}
+              p={4}
+              ml={{ base: 0, md: 6 }}
+            >
               <Image src={homePageImage} />
             </Flex>
-            <Center w='60%'>
+            <Center w={{ base: '100%', md: '60%' }}>
               <Flex
-                gap={12}
+                gap={{ base: 4, lg: 10 }}
                 justify='center'
+                align='center'
                 flexDirection='column'
                 w='100%'
-                p={6}
-                mr={2}
+                p={{ base: 4, md: 6 }}
+                mr={{ md: 2 }}
               >
-                <Heading color='green.700' size='3xl'>
+                <Heading
+                  color='green.700'
+                  size={{
+                    base: 'md',
+                    md: 'lg',
+                    lg: 'xl',
+                    xl: '2xl',
+                    '2xl': '3xl',
+                  }}
+                  textAlign='center'
+                >
                   Welcome to
                   <Box
-                    p={4}
-                    mx={4}
+                    p={{ base: 2, md: 4 }}
+                    mx={{ base: 2, md: 4 }}
+                    my={2}
                     bg='green.100'
                     borderRadius='full'
                     w='fit-content'
                     h='fit-content'
-                    display='inline'
+                    display='inline-block'
                   >
                     Budget Buddy
                   </Box>
                 </Heading>
                 <Text
-                  w='90%'
-                  fontSize='2xl'
+                  w={{ sm: '70%', md: '90%' }}
+                  fontSize={{
+                    base: 'sm',
+                    md: 'md',
+                    lg: 'lg',
+                    xl: 'xl',
+                    '2xl': '2xl',
+                  }}
                   color='green.500'
                   fontWeight='bold'
+                  textAlign='center'
                 >
                   A simple budgeting tool to help you effortlessly manage your
                   money and transform your financial habits.
@@ -71,7 +99,7 @@ function HomePage() {
                       <Button
                         colorScheme='green'
                         variant='solid'
-                        size='lg'
+                        size={{ base: 'sm', md: 'md' }}
                         alignSelf='center'
                       >
                         Get Started
@@ -83,7 +111,11 @@ function HomePage() {
                 {isLoggedIn && (
                   <Center>
                     <Link to='/budgets'>
-                      <Button colorScheme='green' variant='solid' size='lg'>
+                      <Button
+                        colorScheme='green'
+                        variant='solid'
+                        size={{ base: 'sm', md: 'md' }}
+                      >
                         My Budgets
                       </Button>
                     </Link>
@@ -93,7 +125,7 @@ function HomePage() {
             </Center>
           </Flex>
         </Flex>
-        <Flex justify='space-between' m={2} w='99%' h='10%'>
+        <Flex justify='space-between' m={2} h='10%'>
           <Center
             bg='green.700'
             p={4}
@@ -102,7 +134,7 @@ function HomePage() {
             borderBottomLeftRadius='lg'
           >
             <Text
-              fontSize='md'
+              fontSize={{ base: 'xs', md: 'sm' }}
               fontWeight='bold'
               color='white'
               textAlign='center'
@@ -119,8 +151,19 @@ function HomePage() {
             borderTopRightRadius='lg'
             borderBottomRightRadius='lg'
           >
-            <Flex justify='space-between' gap={4} w='fit-content'>
-              <Text fontSize='md' fontWeight='bold' color='white' pt={2}>
+            <Flex
+              justify='space-between'
+              flexDirection={{ base: 'column', md: 'row' }}
+              alignItems='center'
+              gap={4}
+              w='fit-content'
+            >
+              <Text
+                fontSize={{ base: 'xs', md: 'sm' }}
+                fontWeight='bold'
+                color='white'
+                textAlign={{ base: 'center' }}
+              >
                 Find Mary on LinkedIn & GitHub
               </Text>
               <Flex justify='space-between' gap={2} w='fit-content'>
