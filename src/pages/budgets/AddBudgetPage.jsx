@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { addBudget } from '../../api/budgets.api';
 
 import {
+  Center,
   Heading,
   Box,
   Flex,
@@ -170,138 +171,171 @@ function AddBudgetPage() {
 
   return (
     <>
-      <Box
-        maxW='lg'
-        mt={4}
-        mb={8}
-        mx='auto'
-        padding={4}
-        borderWidth='1px'
-        borderRadius='lg'
-      >
-        <Heading color='green.700' size='lg' textAlign='center' mb={2}>
-          Add Budget
-        </Heading>
+      <Center p={2}>
+        <Box
+          maxW='100%'
+          mt={4}
+          mb={8}
+          padding={4}
+          borderWidth='1px'
+          borderRadius='lg'
+        >
+          <Heading color='green.700' size='lg' textAlign='center' mb={2}>
+            Add Budget
+          </Heading>
 
-        <form onSubmit={handleSubmit}>
-          <VStack spacing={4}>
-            <FormControl isInvalid={!!nameError} isRequired>
-              <FormLabel>Budget name:</FormLabel>
-              <Input
-                type='text'
-                value={name}
-                onChange={e => setName(e.target.value)}
-                onBlur={handleNameBlur}
-              />
-              <FormErrorMessage>{nameError}</FormErrorMessage>
-            </FormControl>
+          <form onSubmit={handleSubmit}>
+            <VStack spacing={4} w='100%'>
+              <FormControl isInvalid={!!nameError} isRequired>
+                <FormLabel fontSize={{ base: 'sm', md: 'md' }}>
+                  Budget name:
+                </FormLabel>
+                <Input
+                  size={{ base: 'sm', md: 'md' }}
+                  type='text'
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  onBlur={handleNameBlur}
+                />
+                <FormErrorMessage>{nameError}</FormErrorMessage>
+              </FormControl>
 
-            <FormControl isInvalid={!!startDateError} isRequired>
-              <FormLabel>Start date:</FormLabel>
-              <Input
-                type='date'
-                value={startDate}
-                onChange={e => setStartDate(e.target.value)}
-                onBlur={handleStartDateBlur}
-              />
-              <FormErrorMessage>{startDateError}</FormErrorMessage>
-            </FormControl>
+              <FormControl isInvalid={!!startDateError} isRequired>
+                <FormLabel fontSize={{ base: 'sm', md: 'md' }}>
+                  Start date:
+                </FormLabel>
+                <Input
+                  size={{ base: 'sm', md: 'md' }}
+                  type='date'
+                  value={startDate}
+                  onChange={e => setStartDate(e.target.value)}
+                  onBlur={handleStartDateBlur}
+                />
+                <FormErrorMessage>{startDateError}</FormErrorMessage>
+              </FormControl>
 
-            <FormControl isInvalid={!!endDateError} isRequired>
-              <FormLabel>End date:</FormLabel>
-              <Input
-                type='date'
-                value={endDate}
-                onChange={e => setEndDate(e.target.value)}
-                onBlur={handleEndDateBlur}
-              />
-              <FormErrorMessage>{endDateError}</FormErrorMessage>
-            </FormControl>
+              <FormControl isInvalid={!!endDateError} isRequired>
+                <FormLabel fontSize={{ base: 'sm', md: 'md' }}>
+                  End date:
+                </FormLabel>
+                <Input
+                  size={{ base: 'sm', md: 'md' }}
+                  type='date'
+                  value={endDate}
+                  onChange={e => setEndDate(e.target.value)}
+                  onBlur={handleEndDateBlur}
+                />
+                <FormErrorMessage>{endDateError}</FormErrorMessage>
+              </FormControl>
 
-            <FormControl isInvalid={!!totalIncomeError} isRequired>
-              <FormLabel>Total income:</FormLabel>
-              <Input
-                type='number'
-                placeholder='0'
-                value={totalIncome}
-                onChange={e => setTotalIncome(e.target.value)}
-                onBlur={handleIncomeBlur}
-              />
-              <FormErrorMessage>{totalIncomeError}</FormErrorMessage>
-            </FormControl>
+              <FormControl isInvalid={!!totalIncomeError} isRequired>
+                <FormLabel fontSize={{ base: 'sm', md: 'md' }}>
+                  Total income:
+                </FormLabel>
+                <Input
+                  size={{ base: 'sm', md: 'md' }}
+                  type='number'
+                  placeholder='0'
+                  value={totalIncome}
+                  onChange={e => setTotalIncome(e.target.value)}
+                  onBlur={handleIncomeBlur}
+                />
+                <FormErrorMessage>{totalIncomeError}</FormErrorMessage>
+              </FormControl>
 
-            <FormControl isInvalid={!!savingsGoalError} isRequired>
-              <FormLabel>Savings goal:</FormLabel>
-              <Input
-                type='number'
-                placeholder='0'
-                value={savingsGoal}
-                onChange={e => setSavingsGoal(e.target.value)}
-                onBlur={handleSavingsBlur}
-              />
-              <FormErrorMessage>{savingsGoalError}</FormErrorMessage>
-            </FormControl>
+              <FormControl isInvalid={!!savingsGoalError} isRequired>
+                <FormLabel fontSize={{ base: 'sm', md: 'md' }}>
+                  Savings goal:
+                </FormLabel>
+                <Input
+                  size={{ base: 'sm', md: 'md' }}
+                  type='number'
+                  placeholder='0'
+                  value={savingsGoal}
+                  onChange={e => setSavingsGoal(e.target.value)}
+                  onBlur={handleSavingsBlur}
+                />
+                <FormErrorMessage>{savingsGoalError}</FormErrorMessage>
+              </FormControl>
 
-            <FormControl>
-              <FormLabel>Budget by spending category:</FormLabel>
-              {categoryAllocation.map((item, index) => (
-                <Flex
-                  key={index}
-                  justify='flex-start'
-                  gap={2}
-                  mb={2}
-                  width='100%'
-                >
-                  <Select
-                    placeholder='Select Category'
-                    width='65%'
-                    value={item.name}
-                    onChange={e => handleCategoryChange(index, e.target.value)}
+              <FormControl>
+                <FormLabel fontSize={{ base: 'sm', md: 'md' }}>
+                  Budget by spending category:
+                </FormLabel>
+                {categoryAllocation.map((item, index) => (
+                  <Flex
+                    key={index}
+                    justify='flex-start'
+                    align='center'
+                    gap={2}
+                    mb={2}
+                    width='100%'
                   >
-                    <option>Rent / Mortgage</option>
-                    <option>Bills</option>
-                    <option>Groceries</option>
-                    <option>Transport</option>
-                    <option>Restaurants</option>
-                    <option>Shopping</option>
-                    <option>Entertainment</option>
-                  </Select>
+                    <Select
+                      size={{ base: 'sm', md: 'md' }}
+                      placeholder='Select Category'
+                      width='65%'
+                      value={item.name}
+                      onChange={e =>
+                        handleCategoryChange(index, e.target.value)
+                      }
+                    >
+                      <option>Rent / Mortgage</option>
+                      <option>Bills</option>
+                      <option>Groceries</option>
+                      <option>Transport</option>
+                      <option>Restaurants</option>
+                      <option>Shopping</option>
+                      <option>Entertainment</option>
+                    </Select>
 
-                  <Input
-                    type='number'
-                    placeholder='0'
-                    width='20%'
-                    value={item.amount}
-                    onChange={e => handleAmountChange(index, e.target.value)}
-                  />
-
-                  {index === categoryAllocation.length - 1 && (
-                    <IconButton
-                      aria-label='Add Category'
-                      icon={<AddIcon />}
-                      onClick={handleAddItem}
-                      colorScheme='green'
-                      variant='ghost'
+                    <Input
+                      size={{ base: 'sm', md: 'md' }}
+                      type='number'
+                      placeholder='0'
+                      width='15%'
+                      value={item.amount}
+                      onChange={e => handleAmountChange(index, e.target.value)}
                     />
-                  )}
-                </Flex>
-              ))}
-            </FormControl>
-            <ButtonGroup>
-              <Button type='submit' colorScheme='green' variant='solid'>
-                Add Budget
-              </Button>
-              <Link to='/budgets'>
-                <Button colorScheme='green' variant='outline'>
-                  Return to Budgets
-                </Button>
-              </Link>
-            </ButtonGroup>
 
-            {error && <Text color='red.500'>{error}</Text>}
-          </VStack>
-        </form>
-      </Box>
+                    {index === categoryAllocation.length - 1 && (
+                      <IconButton
+                        size={{ base: 'xs', sm: 'sm', md: 'md' }}
+                        aria-label='Add Category'
+                        icon={<AddIcon />}
+                        onClick={handleAddItem}
+                        colorScheme='green'
+                        variant='ghost'
+                      />
+                    )}
+                  </Flex>
+                ))}
+              </FormControl>
+              <ButtonGroup>
+                <Button
+                  type='submit'
+                  colorScheme='green'
+                  variant='solid'
+                  size={{ base: 'sm', md: 'md' }}
+                >
+                  Add Budget
+                </Button>
+                <Link to='/budgets'>
+                  <Button
+                    colorScheme='green'
+                    variant='outline'
+                    size={{ base: 'sm', md: 'md' }}
+                  >
+                    Return to Budgets
+                  </Button>
+                </Link>
+              </ButtonGroup>
+
+              {error && <Text color='red.500'>{error}</Text>}
+            </VStack>
+          </form>
+        </Box>
+      </Center>
     </>
   );
 }
