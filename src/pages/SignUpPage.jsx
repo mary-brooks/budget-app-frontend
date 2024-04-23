@@ -4,6 +4,7 @@ import { signup } from '../api/auth.api';
 
 import {
   Box,
+  Center,
   Heading,
   VStack,
   FormControl,
@@ -90,67 +91,78 @@ function Signup() {
 
   return (
     <>
-      <Box
-        maxW='lg'
-        mt={4}
-        mb={8}
-        mx='auto'
-        padding={4}
-        borderWidth='1px'
-        borderRadius='lg'
-      >
-        <Heading size='lg' color='green.700' textAlign='center' mb={2}>
-          Sign up
-        </Heading>
+      <Center>
+        <Box
+          w={{ lg: '25%' }}
+          mt={4}
+          mb={8}
+          mx={2}
+          padding={4}
+          borderWidth='1px'
+          borderRadius='lg'
+        >
+          <Heading size='lg' color='green.700' textAlign='center' mb={2}>
+            Sign up
+          </Heading>
 
-        <form onSubmit={handleSubmit}>
-          <VStack spacing={4}>
-            <FormControl isInvalid={!!nameError} isRequired>
-              <FormLabel>Name</FormLabel>
-              <Input
-                type='text'
-                value={name}
-                onChange={e => setName(e.target.value)}
-                onBlur={handleNameBlur}
-              />
-              <FormErrorMessage>{nameError}</FormErrorMessage>
-            </FormControl>
+          <form onSubmit={handleSubmit}>
+            <VStack spacing={4}>
+              <FormControl isInvalid={!!nameError} isRequired>
+                <FormLabel>Name</FormLabel>
+                <Input
+                  type='text'
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  onBlur={handleNameBlur}
+                />
+                <FormErrorMessage>{nameError}</FormErrorMessage>
+              </FormControl>
 
-            <FormControl isInvalid={!!emailError} isRequired>
-              <FormLabel>Email</FormLabel>
-              <Input
-                type='email'
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                onBlur={handleEmailBlur}
-              />
-              <FormErrorMessage>{emailError}</FormErrorMessage>
-            </FormControl>
+              <FormControl isInvalid={!!emailError} isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  type='email'
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  onBlur={handleEmailBlur}
+                />
+                <FormErrorMessage>{emailError}</FormErrorMessage>
+              </FormControl>
 
-            <FormControl isInvalid={!!passwordError} isRequired>
-              <FormLabel>Password</FormLabel>
-              <Input
-                type='password'
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                onBlur={handlePasswordBlur}
-              />
-              <FormErrorMessage>{passwordError}</FormErrorMessage>
-            </FormControl>
+              <FormControl isInvalid={!!passwordError} isRequired>
+                <FormLabel>Password</FormLabel>
+                <Input
+                  type='password'
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  onBlur={handlePasswordBlur}
+                />
+                <FormErrorMessage>{passwordError}</FormErrorMessage>
+              </FormControl>
 
-            <Button type='submit' colorScheme='green' variant='solid'>
-              Sign up
-            </Button>
-          </VStack>
-        </form>
-      </Box>
+              <Button
+                type='submit'
+                colorScheme='green'
+                variant='solid'
+                size={{ base: 'sm', md: 'md' }}
+              >
+                Sign up
+              </Button>
+            </VStack>
+          </form>
+        </Box>
+      </Center>
 
       <VStack spacing={4}>
         {error && <Text color='red.500'>{error}</Text>}
 
         <Text>Already have an account?</Text>
         <Link to={'/login'}>
-          <Button colorScheme='green' variant='outline'>
+          <Button
+            colorScheme='green'
+            variant='outline'
+            size={{ base: 'sm', md: 'md' }}
+          >
             Login
           </Button>
         </Link>
