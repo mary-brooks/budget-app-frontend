@@ -254,34 +254,37 @@ function TransactionForm({
       <form onSubmit={handleSubmit}>
         <VStack spacing={4}>
           <FormControl isInvalid={!!vendorError} isRequired>
-            <FormLabel>Vendor:</FormLabel>
+            <FormLabel fontSize={{ base: 'sm', md: 'md' }}>Vendor:</FormLabel>
             <Input
               type='text'
               value={vendor}
               onChange={e => setVendor(e.target.value)}
               onBlur={handleVendorBlur}
+              size={{ base: 'sm', md: 'md' }}
             />
             <FormErrorMessage>{vendorError}</FormErrorMessage>
           </FormControl>
 
           <FormControl isInvalid={!!dateError} isRequired>
-            <FormLabel>Date:</FormLabel>
+            <FormLabel fontSize={{ base: 'sm', md: 'md' }}>Date:</FormLabel>
             <Input
               type='date'
               value={date}
               onChange={e => setDate(formatDate(e.target.value))}
               onBlur={handleDateBlur}
+              size={{ base: 'sm', md: 'md' }}
             />
             <FormErrorMessage>{dateError}</FormErrorMessage>
           </FormControl>
 
           <FormControl isInvalid={!!categoryError} isRequired>
-            <FormLabel>Category:</FormLabel>
+            <FormLabel fontSize={{ base: 'sm', md: 'md' }}>Category:</FormLabel>
             <Select
               placeholder='Select Category'
               value={category}
               onChange={e => setCategory(e.target.value)}
               onBlur={handleCategoryBlur}
+              size={{ base: 'sm', md: 'md' }}
             >
               <option>Rent / Mortgage</option>
               <option>Bills</option>
@@ -295,13 +298,14 @@ function TransactionForm({
           </FormControl>
 
           <FormControl isInvalid={!!amountError} isRequired>
-            <FormLabel>Amount:</FormLabel>
+            <FormLabel fontSize={{ base: 'sm', md: 'md' }}>Amount:</FormLabel>
             <Input
               type='number'
               placeholder='0'
               value={amount}
               onChange={e => setAmount(e.target.value)}
               onBlur={handleAmountBlur}
+              size={{ base: 'sm', md: 'md' }}
             />
             <FormErrorMessage>{amountError}</FormErrorMessage>
           </FormControl>
@@ -321,11 +325,14 @@ function TransactionForm({
           {isTransactionAbroad && (
             <>
               <FormControl>
-                <FormLabel>Currency:</FormLabel>
+                <FormLabel fontSize={{ base: 'sm', md: 'md' }}>
+                  Currency:
+                </FormLabel>
                 <Select
                   placeholder='EUR'
                   value={currency}
                   onChange={e => setCurrency(e.target.value)}
+                  size={{ base: 'sm', md: 'md' }}
                 >
                   <option>GBP</option>
                   <option>CHF</option>
@@ -339,12 +346,15 @@ function TransactionForm({
               </FormControl>
 
               <FormControl>
-                <FormLabel>Amount in Euros:</FormLabel>
+                <FormLabel fontSize={{ base: 'sm', md: 'md' }}>
+                  Amount in Euros:
+                </FormLabel>
                 <Input
                   type='number'
                   placeholder='0'
                   value={convertedAmount}
                   readOnly
+                  size={{ base: 'sm', md: 'md' }}
                 />
               </FormControl>
             </>
@@ -352,13 +362,19 @@ function TransactionForm({
 
           {selectedTransaction && (
             <ButtonGroup mb={6}>
-              <Button type='submit' colorScheme='green' variant='solid'>
+              <Button
+                type='submit'
+                colorScheme='green'
+                variant='solid'
+                size={{ base: 'sm', md: 'md' }}
+              >
                 Update Transaction
               </Button>
               <Button
                 colorScheme='green'
                 variant='outline'
                 onClick={handleDelete}
+                size={{ base: 'sm', md: 'md' }}
               >
                 Delete
               </Button>
@@ -370,8 +386,8 @@ function TransactionForm({
               type='submit'
               colorScheme='green'
               variant='solid'
-              m={2}
               mb={6}
+              size={{ base: 'sm', md: 'md' }}
             >
               Add Transaction
             </Button>

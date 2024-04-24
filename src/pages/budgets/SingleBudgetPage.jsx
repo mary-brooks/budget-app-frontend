@@ -282,7 +282,7 @@ function SingleBudgetPage() {
                       </Button>
                     </Link>
                     <IconButton
-                      aria-label='Add Category'
+                      aria-label='Add Transaction'
                       icon={<AddIcon />}
                       colorScheme='green'
                       variant='outline'

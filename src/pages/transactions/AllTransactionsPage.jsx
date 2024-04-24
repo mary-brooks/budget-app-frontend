@@ -121,7 +121,13 @@ function AllTransactionsPage() {
 
   return (
     <>
-      <Heading size='2xl' color='green.900' textAlign='center' mt={4} mb={8}>
+      <Heading
+        size={{ base: 'xl', md: '2xl' }}
+        color='green.900'
+        textAlign='center'
+        mt={4}
+        mb={{ base: 4, md: 6 }}
+      >
         All Transactions
       </Heading>
 
@@ -133,52 +139,80 @@ function AllTransactionsPage() {
         flexDirection='column'
         width='100%'
         gap={2}
+        p={2}
       >
-        <Box borderWidth='1px' borderRadius='lg' padding={6} width='60%' mb={6}>
+        <Box borderWidth='1px' borderRadius='lg' padding={6} mb={6} maxW='100%'>
           <Heading size='md' color='green.700' mb={6}>
             Search Transactions
           </Heading>
-          <Flex width='100%' justify='space-between' bg='green.50' p={4}>
-            <Box w='30%'>
-              <Text fontSize='md' fontWeight='bold' mb={2}>
+          <Flex
+            width='100%'
+            justify={{ base: 'flex-start', md: 'space-between' }}
+            direction={{ base: 'column', md: 'row' }}
+            bg='green.50'
+            gap={2}
+            p={4}
+          >
+            <Box w={{ base: '100%', md: '30%' }}>
+              <Text
+                fontSize={{ base: 'sm', md: 'md' }}
+                fontWeight='bold'
+                mb={2}
+              >
                 By vendor:
               </Text>
               <Input
+                size={{ base: 'sm', md: 'md' }}
                 type='text'
                 placeholder='Search...'
                 onChange={e => setSearchVendor(e.target.value)}
               />
             </Box>
-            <Box w='30%'>
-              <Text fontSize='md' fontWeight='bold' mb={2}>
+            <Box w={{ base: '100%', md: '30%' }}>
+              <Text
+                fontSize={{ base: 'sm', md: 'md' }}
+                fontWeight='bold'
+                mb={2}
+              >
                 By category:
               </Text>
               <Input
+                size={{ base: 'sm', md: 'md' }}
                 type='text'
                 placeholder='Search...'
                 onChange={e => setSearchCategory(e.target.value)}
               />
             </Box>
 
-            <Box w='20%'>
-              <Text fontSize='md' fontWeight='bold' mb={2}>
+            <Box w={{ base: '100%', md: '20%' }}>
+              <Text
+                fontSize={{ base: 'sm', md: 'md' }}
+                fontWeight='bold'
+                mb={2}
+              >
                 By date:
               </Text>
               <Input
+                size={{ base: 'sm', md: 'md' }}
                 type='date'
                 onChange={e => setSearchDate(e.target.value)}
               />
             </Box>
 
-            <Box w='15%'>
-              <Text fontSize='md' fontWeight='bold' mb={2}>
+            <Box w={{ base: '100%', md: '15%' }}>
+              <Text
+                fontSize={{ base: 'sm', md: 'md' }}
+                fontWeight='bold'
+                mb={2}
+              >
                 By amount:
               </Text>
               <InputGroup>
-                <InputLeftElement pointerEvents='none'>
+                <InputLeftElement pointerEvents='none' h='full'>
                   <FaEuroSign />
                 </InputLeftElement>
                 <Input
+                  size={{ base: 'sm', md: 'md' }}
                   type='number'
                   placeholder='0.00'
                   onChange={e => setSearchAmount(e.target.value)}
@@ -188,13 +222,25 @@ function AllTransactionsPage() {
           </Flex>
         </Box>
 
-        <Box borderWidth='1px' borderRadius='lg' width='50%' p={6} mb={4}>
-          <Flex justify='flex-end'>
-            <Button colorScheme='green' variant='outline' mb={6}>
+        <Box
+          borderWidth='1px'
+          borderRadius='lg'
+          width={{ base: '100%', sm: '80%', md: '75%', lg: '60%', xl: '50%' }}
+          p={{ base: 4, md: 6 }}
+          mb={4}
+        >
+          <Flex justify={{ base: 'center', sm: 'flex-end' }}>
+            <Button
+              colorScheme='green'
+              variant='outline'
+              mb={6}
+              size={{ base: 'sm', md: 'md' }}
+              onClick={onOpen}
+            >
               Add Transaction
             </Button>
           </Flex>
-          <VStack divider={<StackDivider />} spacing='4' mb={6} p={2}>
+          <VStack divider={<StackDivider />} spacing='4' mb={6}>
             {transactions.length === 0 && (
               <Flex w='100%' justify='center' align='center'>
                 <Box p={2} bg='green.50' borderRadius='lg' w='fit-content'>
@@ -211,33 +257,49 @@ function AllTransactionsPage() {
                   <Flex
                     key={transaction._id}
                     justify='space-between'
+                    wrap='wrap'
                     width='100%'
+                    gap={2}
                   >
-                    <Box w='30%'>
-                      <Heading size='sm' mb={2}>
+                    <Box w={{ base: '45%', sm: '30%' }}>
+                      <Heading size={{ base: 'xs', md: 'sm' }} mb={2}>
                         {transaction.vendor}
                       </Heading>
                       <Box
-                        p={2}
+                        p={{ base: 1, md: 2 }}
                         bg='green.100'
                         borderRadius='lg'
                         w='fit-content'
                       >
-                        <Text fontSize='sm'>{transaction.category}</Text>
+                        <Text fontSize={{ base: 'xs', md: 'sm' }}>
+                          {transaction.category}
+                        </Text>
                       </Box>
                     </Box>
-                    <Box w='30%'>
-                      <Text fontSize='md' fontWeight='bold' mb={2}>
+                    <Box
+                      w={{ base: '45%', sm: '30%' }}
+                      textAlign={{ base: 'right', sm: 'left' }}
+                    >
+                      <Text
+                        fontSize={{ base: 'sm', md: 'md' }}
+                        fontWeight='bold'
+                        mb={2}
+                      >
                         {`€${transaction.convertedAmount}`}
                       </Text>
-                      <Text fontSize='sm'>{`on ${formatDate(
-                        transaction.date
-                      )}`}</Text>
+                      <Text
+                        fontSize={{ base: 'xs', md: 'sm' }}
+                      >{`on ${formatDate(transaction.date)}`}</Text>
                     </Box>
-                    <Box w='10%'>
+                    <Box
+                      w={{ base: '100%', sm: '15%' }}
+                      textAlign='center'
+                      mt={{ base: 4, sm: 0 }}
+                    >
                       <Button
                         colorScheme='green'
                         variant='ghost'
+                        size={{ base: 'xs', md: 'sm' }}
                         onClick={() => handleEditTransaction(transaction)}
                       >
                         Edit
@@ -259,7 +321,11 @@ function AllTransactionsPage() {
           </VStack>
           <Center>
             <Link to={`/budgets/${budgetId}`}>
-              <Button colorScheme='green' variant='solid'>
+              <Button
+                colorScheme='green'
+                variant='solid'
+                size={{ base: 'sm', md: 'md' }}
+              >
                 Back to budget
               </Button>
             </Link>
@@ -267,7 +333,7 @@ function AllTransactionsPage() {
         </Box>
       </Flex>
 
-      <Modal isOpen={isOpen} onClose={onClose} size='md'>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           {!selectedTransaction && (
