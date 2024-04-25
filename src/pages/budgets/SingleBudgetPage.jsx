@@ -158,7 +158,7 @@ function SingleBudgetPage() {
       {budget && (
         <>
           <Heading
-            size='2xl'
+            size={{ base: 'xl', md: '2xl' }}
             textAlign='center'
             mt={6}
             mb={4}
@@ -168,7 +168,8 @@ function SingleBudgetPage() {
           </Heading>
 
           <Flex
-            justify='space-evenly'
+            justify={{ base: 'center', lg: 'space-evenly' }}
+            direction={{ base: 'column', lg: 'row' }}
             align='flex-start'
             p={4}
             mb={4}
@@ -178,21 +179,32 @@ function SingleBudgetPage() {
               justify='center'
               direction='column'
               align='flex-start'
-              w='42%'
+              w={{ base: '100%', lg: '42%' }}
             >
               <Box
                 borderWidth='1px'
                 borderRadius='lg'
-                padding={6}
+                p={{ base: 4, md: 6 }}
                 width='100%'
                 mb={6}
               >
-                <Flex width='100%' justify='space-between' mb={8}>
-                  <Heading size='lg' color='green.700'>
+                <Flex
+                  width='100%'
+                  justify={{ base: 'center', sm: 'space-between' }}
+                  direction={{ base: 'column', sm: 'row' }}
+                  align='center'
+                  gap={{ base: 4, md: 2 }}
+                  mb={4}
+                >
+                  <Heading size={{ base: 'md', md: 'lg' }} color='green.700'>
                     Budget Overview
                   </Heading>
                   <Link to={`/budgets/update/${budget._id}`}>
-                    <Button colorScheme='green' variant='outline'>
+                    <Button
+                      colorScheme='green'
+                      variant='outline'
+                      size={{ base: 'sm', xl: 'md' }}
+                    >
                       Edit Budget
                     </Button>
                   </Link>
@@ -201,35 +213,61 @@ function SingleBudgetPage() {
                 <VStack
                   divider={<StackDivider />}
                   spacing='4'
-                  align='flex-start'
+                  align='center'
                   bg='green.50'
                   borderRadius='lg'
                   p={4}
-                  m={2}
                 >
-                  <Flex justify='space-between' width='100%'>
-                    <Heading size='md' color='green.500'>
+                  <Flex
+                    justify='space-between'
+                    align='center'
+                    gap={1}
+                    width='100%'
+                  >
+                    <Heading size={{ base: 'sm', md: 'md' }} color='green.500'>
                       Date:
                     </Heading>
-                    <Text fontSize='md' fontWeight='bold' pt={2}>{`${formatDate(
-                      budget.startDate
-                    )} - ${formatDate(budget.endDate)}`}</Text>
+                    <Text
+                      fontSize={{ base: 'xs', sm: 'sm', md: 'md' }}
+                      fontWeight='bold'
+                      textAlign='right'
+                    >{`${formatDate(budget.startDate)} - ${formatDate(
+                      budget.endDate
+                    )}`}</Text>
                   </Flex>
 
-                  <Flex justify='space-between' width='100%'>
-                    <Heading size='md' color='green.500'>
+                  <Flex
+                    justify='space-between'
+                    align='center'
+                    gap={1}
+                    width='100%'
+                  >
+                    <Heading size={{ base: 'sm', md: 'md' }} color='green.500'>
                       Total Income:
                     </Heading>
-                    <Text fontSize='md' fontWeight='bold' pt={2}>
+                    <Text
+                      fontSize={{ base: 'xs', sm: 'sm', md: 'md' }}
+                      fontWeight='bold'
+                      textAlign='right'
+                    >
                       {`€${budget.totalIncome.toFixed(2)}`}
                     </Text>
                   </Flex>
 
-                  <Flex justify='space-between' width='100%'>
-                    <Heading size='md' color='green.500'>
+                  <Flex
+                    justify='space-between'
+                    align='center'
+                    gap={1}
+                    width='100%'
+                  >
+                    <Heading size={{ base: 'sm', md: 'md' }} color='green.500'>
                       Savings Goal:
                     </Heading>
-                    <Text fontSize='md' fontWeight='bold' pt={2}>
+                    <Text
+                      fontSize={{ base: 'xs', sm: 'sm', md: 'md' }}
+                      fontWeight='bold'
+                      textAlign='right'
+                    >
                       {`€${budget.savingsGoal.toFixed(2)}`}
                     </Text>
                   </Flex>
@@ -239,23 +277,36 @@ function SingleBudgetPage() {
               <Box
                 borderWidth='1px'
                 borderRadius='lg'
-                padding={6}
+                p={{ base: 4, md: 6 }}
                 width='100%'
                 mb={6}
               >
-                <Heading size='lg' color='green.700' mb={8}>
+                <Heading
+                  size={{ base: 'md', md: 'lg' }}
+                  textAlign={{ base: 'center', md: 'left' }}
+                  color='green.700'
+                  mb={6}
+                >
                   Savings
                 </Heading>
                 {hasOverspent() ? (
                   <Box p={4} m={2} bg='orange.100' borderRadius='lg'>
-                    <Text fontSize='md' fontWeight='bold'>
+                    <Text
+                      fontSize={{ base: 'sm', md: 'md' }}
+                      fontWeight='bold'
+                      textAlign='center'
+                    >
                       You've overspent by €{overspentAmount().toFixed(2)}.
                       Consider amending your budget.
                     </Text>
                   </Box>
                 ) : (
                   <Box p={4} m={2} bg='green.100' borderRadius='lg'>
-                    <Text fontSize='md' fontWeight='bold'>
+                    <Text
+                      fontSize={{ base: 'sm', md: 'md' }}
+                      fontWeight='bold'
+                      textAlign='center'
+                    >
                       You're on track! Spend less than €
                       {remainingBudget().toFixed(2)} to meet your savings goal.
                     </Text>
@@ -266,18 +317,29 @@ function SingleBudgetPage() {
               <Box
                 borderWidth='1px'
                 borderRadius='lg'
-                padding={6}
+                p={{ base: 4, md: 6 }}
                 width='100%'
                 mb={6}
               >
-                <Flex width='100%' justify='space-between' mb={4}>
-                  <Heading size='lg' color='green.700'>
+                <Flex
+                  width='100%'
+                  justify={{ base: 'center', sm: 'space-between' }}
+                  direction={{ base: 'column', sm: 'row' }}
+                  align='center'
+                  gap={{ base: 4, md: 2 }}
+                  mb={4}
+                >
+                  <Heading size={{ base: 'md', md: 'lg' }} color='green.700'>
                     Transactions
                   </Heading>
 
                   <ButtonGroup>
                     <Link to={`/budgets/${budget._id}/transactions`}>
-                      <Button colorScheme='green' variant='solid'>
+                      <Button
+                        colorScheme='green'
+                        variant='solid'
+                        size={{ base: 'sm', xl: 'md' }}
+                      >
                         View all
                       </Button>
                     </Link>
@@ -286,6 +348,7 @@ function SingleBudgetPage() {
                       icon={<AddIcon />}
                       colorScheme='green'
                       variant='outline'
+                      size={{ base: 'sm', xl: 'md' }}
                       onClick={onOpen}
                     />
                   </ButtonGroup>
@@ -300,7 +363,7 @@ function SingleBudgetPage() {
                       borderRadius='lg'
                       w='fit-content'
                     >
-                      <Text fontSize='sm' fontStyle='italic'>
+                      <Text fontSize='sm' fontStyle='italic' textAlign='center'>
                         Your transactions will appear here.
                       </Text>
                     </Box>
@@ -312,7 +375,6 @@ function SingleBudgetPage() {
                   spacing='4'
                   align='flex-start'
                   borderRadius='lg'
-                  p={2}
                   m={2}
                 >
                   {recentTransactions &&
@@ -322,32 +384,48 @@ function SingleBudgetPage() {
                           key={transaction._id}
                           justify='space-between'
                           width='100%'
+                          wrap='wrap'
+                          gap={2}
                         >
-                          <Box w='30%'>
-                            <Heading size='sm' mb={2}>
+                          <Box w={{ base: '45%', sm: '30%' }}>
+                            <Heading size={{ base: 'xs', md: 'sm' }} mb={2}>
                               {transaction.vendor}
                             </Heading>
                             <Box
-                              p={2}
+                              p={{ base: 1, md: 2 }}
                               bg='green.100'
                               borderRadius='lg'
                               w='fit-content'
                             >
-                              <Text fontSize='sm'>{transaction.category}</Text>
+                              <Text fontSize={{ base: 'xs', md: 'sm' }}>
+                                {transaction.category}
+                              </Text>
                             </Box>
                           </Box>
-                          <Box w='30%'>
-                            <Text fontSize='md' fontWeight='bold' mb={2}>
+                          <Box
+                            w={{ base: '45%', sm: '30%' }}
+                            textAlign={{ base: 'right', sm: 'left' }}
+                          >
+                            <Text
+                              fontSize={{ base: 'sm', md: 'md' }}
+                              fontWeight='bold'
+                              mb={2}
+                            >
                               {`€${transaction.convertedAmount.toFixed(2)}`}
                             </Text>
-                            <Text fontSize='sm'>{`on ${formatDate(
-                              transaction.date
-                            )}`}</Text>
+                            <Text
+                              fontSize={{ base: 'xs', md: 'sm' }}
+                            >{`on ${formatDate(transaction.date)}`}</Text>
                           </Box>
-                          <Box w='10%'>
+                          <Box
+                            w={{ base: '100%', sm: '15%' }}
+                            textAlign='center'
+                            mt={{ base: 4, sm: 0 }}
+                          >
                             <Button
                               colorScheme='green'
                               variant='ghost'
+                              size={{ base: 'xs', md: 'sm' }}
                               onClick={() => handleEditTransaction(transaction)}
                             >
                               Edit
@@ -364,16 +442,21 @@ function SingleBudgetPage() {
               justify='center'
               direction='column'
               align='flex-start'
-              w='50%'
+              w={{ base: '100%', lg: '50%' }}
             >
               <Box
                 borderWidth='1px'
                 borderRadius='lg'
-                padding={6}
+                p={{ base: 4, md: 6 }}
                 width='100%'
                 mb={6}
               >
-                <Heading size='lg' color='green.700' mb={6}>
+                <Heading
+                  size={{ base: 'md', md: 'lg' }}
+                  textAlign={{ base: 'center', md: 'left' }}
+                  color='green.700'
+                  mb={6}
+                >
                   Spending Overview
                 </Heading>
 
@@ -387,7 +470,7 @@ function SingleBudgetPage() {
                       mt={6}
                       mb={8}
                     >
-                      <Text fontSize='sm' fontStyle='italic'>
+                      <Text fontSize='sm' fontStyle='italic' textAlign='center'>
                         An overview of your spending will appear here.
                       </Text>
                     </Box>
@@ -404,11 +487,16 @@ function SingleBudgetPage() {
               <Box
                 borderWidth='1px'
                 borderRadius='lg'
-                padding={6}
+                p={{ base: 4, md: 6 }}
                 width='100%'
                 mb={6}
               >
-                <Heading size='lg' color='green.700' mb={6}>
+                <Heading
+                  size={{ base: 'md', md: 'lg' }}
+                  textAlign={{ base: 'center', md: 'left' }}
+                  color='green.700'
+                  mb={6}
+                >
                   Total spending
                 </Heading>
 
@@ -431,19 +519,27 @@ function SingleBudgetPage() {
                   m={2}
                 >
                   <Flex justify='space-between' width='100%'>
-                    <Heading size='md' color='green.500'>
+                    <Heading size={{ base: 'sm', md: 'md' }} color='green.500'>
                       Spent:
                     </Heading>
-                    <Text fontSize='md' fontWeight='bold' pt={2}>
+                    <Text
+                      fontSize={{ base: 'sm', md: 'md' }}
+                      fontWeight='bold'
+                      pt={{ base: 0, md: 2 }}
+                    >
                       {`€${totalSpent(transactions).toFixed(2)}`}
                     </Text>
                   </Flex>
 
                   <Flex justify='space-between' width='100%'>
-                    <Heading size='md' color='green.500'>
+                    <Heading size={{ base: 'sm', md: 'md' }} color='green.500'>
                       Remaining Income:
                     </Heading>
-                    <Text fontSize='md' fontWeight='bold' pt={2}>
+                    <Text
+                      fontSize={{ base: 'sm', md: 'md' }}
+                      fontWeight='bold'
+                      pt={{ base: 0, md: 2 }}
+                    >
                       {`€${(remainingBudget() + budget.savingsGoal).toFixed(
                         2
                       )}`}
@@ -455,23 +551,33 @@ function SingleBudgetPage() {
               <Box
                 borderWidth='1px'
                 borderRadius='lg'
-                padding={6}
+                p={{ base: 4, md: 6 }}
                 width='100%'
                 mb={6}
               >
-                <VStack width='100%' align='flex-start' spacing='4'>
-                  <Heading size='lg' color='green.700'>
+                <VStack
+                  width='100%'
+                  align={{ base: 'center', md: 'flex-start' }}
+                  spacing='4'
+                >
+                  <Heading
+                    size={{ base: 'md', md: 'lg' }}
+                    color='green.700'
+                    mb={{ base: 2, md: 6 }}
+                  >
                     Budget by category
                   </Heading>
-                  <Flex width='100%' justify='space-between' wrap='wrap'>
+                  <Flex width='100%' justify='space-evenly' wrap='wrap'>
                     {budget.categoryAllocation.map(category => {
                       return (
                         <Flex
                           key={category.name}
-                          width='30%'
+                          width='100%'
+                          maxW='215px'
+                          wrap='wrap'
                           bg='green.50'
                           borderRadius='lg'
-                          p={4}
+                          p={{ base: 2, md: 4 }}
                           m={2}
                           justify='space-between'
                           alignItems='center'
@@ -488,7 +594,7 @@ function SingleBudgetPage() {
                             thickness='15px'
                           />
 
-                          <Box>
+                          <Box w='65%'>
                             <Stat>
                               <StatLabel>{category.name}</StatLabel>
                               <StatNumber color='blackAlpha800'>{`€${(
